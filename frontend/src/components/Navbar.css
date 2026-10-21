@@ -4,7 +4,7 @@
   inset: 0 0 auto;
   z-index: 50;
   height: var(--header-height);
-  background: rgb(28 28 28 / 0.94);
+  background: rgb(28 28 28 / 0.33);
   color: var(--color-text-on-dark);
   backdrop-filter: blur(6px);
   transition: transform var(--duration-base) ease;

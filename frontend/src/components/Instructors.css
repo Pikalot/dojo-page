@@ -2,20 +2,26 @@
   background: var(--color-grey-100);
 }
 
+/* Three columns (empty | title | arrows) so the title sits at the true center,
+   not just in the space left over beside the arrow buttons. */
 .instructors__header {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-4);
   margin-bottom: var(--space-5);
 }
 
 .instructors__title {
+  grid-column: 2;
   margin-bottom: 0;
-  color: var(--color-orange-deep);
+  color: var(--color-maroon);
+  text-align: center;
 }
 
 .instructors__controls {
+  grid-column: 3;
+  justify-self: end;
   display: none;
   gap: var(--space-2);
 }
@@ -55,9 +61,8 @@
 }
 
 .instructors__track {
-  /* Inset that lines the first card up with the centered .container heading,
-     while still letting the row bleed to the screen edges. */
-  --track-inset: max(var(--gutter), calc((100% - var(--container-max)) / 2 + var(--gutter)));
+  /* Lines the first card up with the heading, which uses the same gutter. */
+  --track-inset: var(--gutter);
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
@@ -80,11 +85,12 @@
 }
 
 .instructor-card {
-  width: min(78vw, 16.5rem);
+  width: min(78vw, 26.5rem);
   padding: var(--space-5);
   border-radius: var(--radius-md);
-  background: var(--color-grey-200);
+  background: var(--color-charcoal);
   scroll-snap-align: start;
+  color: var(--color-white);
 }
 
 .instructor-card__photo {
@@ -95,6 +101,9 @@
   border-radius: var(--radius-md);
   background: #d3d0cf;
   color: #a19c9a;
+  border-radius: 50%;
+  width: 67%;
+  margin-inline: auto;
 }
 
 .instructor-card__photo svg {
@@ -104,14 +113,14 @@
 
 .instructor-card__name {
   font-size: var(--text-xl);
-  color: var(--color-orange-deep);
+  color: var(--color-orange);
 }
 
 .instructor-card__meta {
   margin-block: var(--space-1) var(--space-3);
   font-size: var(--text-sm);
   font-weight: var(--weight-bold);
-  color: var(--color-grey-600);
+  color: var(--color-orange);
 }
 
 .instructor-card__bio {

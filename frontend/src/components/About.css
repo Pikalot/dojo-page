@@ -2,8 +2,13 @@
   background: var(--color-white);
 }
 
-.about__inner {
-  max-width: 50rem;
+/* About-only side padding. Phones keep the normal gutter (full screen);
+   wider screens get extra space on the left and right, as in the wireframe.
+   Change 15% to adjust. */
+@media (min-width: 48rem) {
+  .about .container {
+    padding-inline: 15%;
+  }
 }
 
 .about__title {

@@ -83,10 +83,9 @@ select {
   border: 0;
 }
 
+/* Content spans the full screen width, keeping only the side gutter. */
 .container {
   width: 100%;
-  max-width: var(--container-max);
-  margin-inline: auto;
   padding-inline: var(--gutter);
 }
 

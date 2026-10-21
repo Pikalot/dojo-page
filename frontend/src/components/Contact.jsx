@@ -51,15 +51,18 @@ export function Contact({ contact, location }) {
         />
       </div>
 
-      <a
-        className="button button--light"
-        href={mapsDirectionsUrl(location.mapQuery)}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {t.contact.directions}
-        <span className="visually-hidden"> {t.contact.newTab}</span>
-      </a>
+      {/* Block wrapper so the button follows the panel's centered reading width. */}
+      <p>
+        <a
+          className="button button--light"
+          href={mapsDirectionsUrl(location.mapQuery)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {t.contact.directions}
+          <span className="visually-hidden"> {t.contact.newTab}</span>
+        </a>
+      </p>
     </section>
   );
 }

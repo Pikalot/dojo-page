@@ -8,7 +8,7 @@ export function About({ about, location }) {
 
   return (
     <section id="about" className="section about" aria-labelledby="about-title">
-      <div className="about__inner container">
+      <div className="container">
         <h2 id="about-title" className="section__title about__title" tabIndex={-1}>
           {t.sections.about}
         </h2>

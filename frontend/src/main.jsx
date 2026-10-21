@@ -1,10 +1,12 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { App } from './App.jsx';
-import { LanguageProvider } from './i18n/LanguageContext.jsx';
+// Global styles must load before App, which pulls in component CSS, so that
+// component rules override the shared ones and not the other way round.
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/panels.css';
+import { App } from './App.jsx';
+import { LanguageProvider } from './i18n/LanguageContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
