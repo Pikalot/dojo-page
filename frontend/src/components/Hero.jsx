@@ -1,3 +1,5 @@
+import { useRef, useState } from 'react';
+import { useDoorsClosed } from '../hooks/useDoorsClosed.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import hero640Jpg from '../assets/hero/hero-640.jpg';
 import hero640Webp from '../assets/hero/hero-640.webp';
@@ -14,9 +16,25 @@ const JPG_SRCSET = `${hero640Jpg} 640w, ${hero1024Jpg} 1024w, ${hero1600Jpg} 160
 
 export function Hero() {
   const { t } = useLanguage();
+  const heroRef = useRef(null);
+  const scrolledAway = useDoorsClosed(heroRef);
+  const [hasFocus, setHasFocus] = useState(false);
+
+  // Keep the doors open while a keyboard user is focused on the hero's buttons,
+  // so they can always see what they are on.
+  const doorsClosed = scrolledAway && !hasFocus;
 
   return (
-    <section id="top" className="hero" aria-labelledby="hero-title">
+    <section
+      ref={heroRef}
+      id="top"
+      className="hero"
+      aria-labelledby="hero-title"
+      onFocus={() => setHasFocus(true)}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) setHasFocus(false);
+      }}
+    >
       {/* Decorative backdrop: the heading carries the meaning, so alt is empty. */}
       <picture className="hero__media">
         <source type="image/webp" srcSet={WEBP_SRCSET} sizes="100vw" />
@@ -46,6 +64,12 @@ export function Hero() {
             {t.hero.secondaryCta}
           </SectionLink>
         </div>
+      </div>
+
+      {/* Decorative shoji doors that slide shut as the hero scrolls away. */}
+      <div className="hero__doors" data-closed={doorsClosed} aria-hidden="true">
+        <div className="hero__door hero__door--left" />
+        <div className="hero__door hero__door--right" />
       </div>
     </section>
   );

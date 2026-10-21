@@ -55,6 +55,22 @@ test('header hides when scrolling down and returns when scrolling up', async ({ 
   await expect(header).toHaveAttribute('data-hidden', 'false');
 });
 
+test('hero doors close past 1/3 scrolled out and reopen above 2/3 visible', async ({ page }) => {
+  const doors = page.locator('.hero__doors');
+  const heroHeight = (await page.locator('#top').boundingBox()).height;
+
+  await expect(doors).toHaveAttribute('data-closed', 'false');
+
+  await page.evaluate((y) => window.scrollTo(0, y), Math.round(heroHeight * 0.2));
+  await expect(doors).toHaveAttribute('data-closed', 'false');
+
+  await page.evaluate((y) => window.scrollTo(0, y), Math.round(heroHeight * 0.5));
+  await expect(doors).toHaveAttribute('data-closed', 'true');
+
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect(doors).toHaveAttribute('data-closed', 'false');
+});
+
 test('first Tab reaches the skip link, which moves focus to main content', async ({ page }) => {
   await page.keyboard.press('Tab');
   const skip = page.getByRole('link', { name: 'Skip to main content' });
