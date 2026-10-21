@@ -1,0 +1,67 @@
+.hero {
+  position: relative;
+  display: grid;
+  align-items: end;
+  min-height: min(88vh, 46rem);
+  min-height: min(88svh, 46rem);
+  padding-top: var(--header-height);
+  overflow: hidden;
+  background: var(--color-charcoal);
+  color: var(--color-white);
+  isolation: isolate;
+}
+
+.hero__media,
+.hero__media img,
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__media {
+  z-index: -2;
+}
+
+.hero__media img {
+  object-fit: cover;
+  object-position: 50% 40%;
+}
+
+/* Darkens the bright photo so white text stays readable everywhere on it. */
+.hero__overlay {
+  z-index: -1;
+  background:
+    linear-gradient(to top, rgb(15 12 10 / 0.88) 0%, rgb(15 12 10 / 0.55) 45%, rgb(15 12 10 / 0.25) 100%);
+}
+
+.hero__content {
+  padding-block: var(--space-8);
+}
+
+.hero__title {
+  max-width: 16ch;
+  font-size: var(--text-hero);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 12px rgb(0 0 0 / 0.4);
+}
+
+.hero__tagline {
+  max-width: 40ch;
+  margin-top: var(--space-4);
+  font-size: var(--text-lg);
+  color: rgb(255 255 255 / 0.92);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.hero .button--primary {
+  --focus-color: var(--color-white);
+}

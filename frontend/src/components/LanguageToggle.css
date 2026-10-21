@@ -1,0 +1,24 @@
+.language-toggle {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid rgb(255 255 255 / 0.4);
+  border-radius: var(--radius-pill);
+}
+
+.language-toggle__button {
+  min-width: 2.75rem;
+  min-height: 2.25rem;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--color-text-on-dark);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+}
+
+.language-toggle__button[aria-pressed='true'] {
+  background: var(--color-orange);
+  color: var(--color-ink);
+}

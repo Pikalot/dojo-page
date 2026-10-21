@@ -1,0 +1,119 @@
+.instructors {
+  background: var(--color-grey-100);
+}
+
+.instructors__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.instructors__title {
+  margin-bottom: 0;
+  color: var(--color-orange-deep);
+}
+
+.instructors__controls {
+  display: none;
+  gap: var(--space-2);
+}
+
+/* Touch users swipe; arrow buttons help mouse users on larger screens. */
+@media (min-width: 48rem) {
+  .instructors__controls {
+    display: flex;
+  }
+}
+
+.scroll-button {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid var(--color-orange-deep);
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-orange-deep);
+  cursor: pointer;
+}
+
+.scroll-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.scroll-button:hover:not(:disabled) {
+  background: var(--color-orange-deep);
+  color: var(--color-white);
+}
+
+.scroll-button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.instructors__track {
+  /* Inset that lines the first card up with the centered .container heading,
+     while still letting the row bleed to the screen edges. */
+  --track-inset: max(var(--gutter), calc((100% - var(--container-max)) / 2 + var(--gutter)));
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--track-inset);
+  /* Room for the focus ring and card shadows. */
+  padding-block: var(--space-2) var(--space-4);
+}
+
+.instructors__track:focus-visible {
+  outline-offset: -3px;
+}
+
+.instructors__list {
+  display: flex;
+  gap: var(--space-3);
+  width: max-content;
+  margin: 0;
+  padding: 0 var(--track-inset);
+  list-style: none;
+}
+
+.instructor-card {
+  width: min(78vw, 16.5rem);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--color-grey-200);
+  scroll-snap-align: start;
+}
+
+.instructor-card__photo {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-md);
+  background: #d3d0cf;
+  color: #a19c9a;
+}
+
+.instructor-card__photo svg {
+  width: 55%;
+  height: 55%;
+}
+
+.instructor-card__name {
+  font-size: var(--text-xl);
+  color: var(--color-orange-deep);
+}
+
+.instructor-card__meta {
+  margin-block: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--color-grey-600);
+}
+
+.instructor-card__bio {
+  font-size: var(--text-sm);
+}

@@ -17,3 +17,23 @@ media/
 
 # Documents
 REQUIREMENTS.md
+
+# Node / frontend build output
+node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/
+*.log
+
+# Local env files (keep the example)
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Private implementation notes (decision log, working notes)
+docs/private/
