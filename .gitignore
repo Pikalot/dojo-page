@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+.venv/
+
+# Database (contains student data!)
+db.sqlite3
+
+# Secrets
+.env
+
+# Uploaded photos
+media/
