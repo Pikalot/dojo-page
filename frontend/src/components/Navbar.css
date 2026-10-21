@@ -29,15 +29,10 @@
 }
 
 .brand__logo {
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50%;
-  background: var(--color-indigo);
-  color: var(--color-white);
-  font-weight: var(--weight-bold);
-  font-size: var(--text-lg);
+  object-fit: cover;
 }
 
 .menu-button {
@@ -136,6 +131,6 @@
 
   .site-nav__link {
     padding: var(--space-2) var(--space-3);
-    font-size: var(--text-sm);
+    font-size: var(--text-med);
   }
 }

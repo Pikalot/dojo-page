@@ -5,6 +5,7 @@ import { SECTIONS } from '../sections.js';
 import { LanguageToggle } from './LanguageToggle.jsx';
 import { SectionLink } from './SectionLink.jsx';
 import { SectionSearch } from './SectionSearch.jsx';
+import logo from '../assets/logo.webp';
 import './Navbar.css';
 
 // Must match the breakpoint in Navbar.css where links move out of the menu.
@@ -64,10 +65,8 @@ export function Navbar() {
     >
       <div className="site-header__inner container">
         <a className="brand" href="#top" aria-label={t.nav.home} onClick={closeMenu}>
-          {/* PLACEHOLDER logo until the real Tenshinkai logo is supplied. */}
-          <span className="brand__logo" aria-hidden="true">
-            T
-          </span>
+          {/* Empty alt: the link's aria-label already names it for screen readers. */}
+          <img className="brand__logo" src={logo} alt="" width="64" height="64" />
         </a>
 
         <SectionSearch onNavigate={closeMenu} />
