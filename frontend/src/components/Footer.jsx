@@ -1,6 +1,6 @@
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 
-export function Footer({ dojoName }) {
+export function Footer() {
   const { t } = useLanguage();
   const year = new Date().getFullYear();
 
@@ -8,7 +8,7 @@ export function Footer({ dojoName }) {
     <footer className="site-footer">
       <div className="container">
         <p>
-          © {year} {dojoName}. {t.footer.rights}
+          © {year} {t.hero.title}. {t.footer.rights}
         </p>
         <p className="site-footer__notice">{t.footer.placeholderNotice}</p>
       </div>

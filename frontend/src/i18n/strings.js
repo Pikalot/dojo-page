@@ -41,7 +41,7 @@ export const strings = {
       secondaryCta: 'Contact us',
     },
     sections: {
-      about: 'About Aikido / Tenshinkai',
+      about: 'Tenshinkai Aikido San Jose',
       whereWeTrain: 'Where we train',
       seeMap: 'See map and directions',
       announcements: 'Info & Announcements',
@@ -49,6 +49,9 @@ export const strings = {
       instructors: 'Instructors',
       contact: 'Contact Us',
       fees: 'Fees',
+    },
+    about: {
+      photoAlt: 'Tenshinkai Aikido members in hakama holding their rank certificates in the dojo',
     },
     schedule: {
       day: 'Day',
@@ -72,6 +75,10 @@ export const strings = {
       directions: 'Get directions',
       mapTitle: 'Map showing the dojo location',
       newTab: '(opens in a new tab)',
+    },
+    content: {
+      loading: 'Loading…',
+      error: 'Sorry, this section could not be loaded. Please try again later.',
     },
     footer: {
       rights: 'All rights reserved.',
@@ -110,7 +117,7 @@ export const strings = {
       secondaryCta: 'Liên hệ',
     },
     sections: {
-      about: 'Giới thiệu Aikido / Tenshinkai',
+      about: 'Tenshinkai Aikido San Jose',
       whereWeTrain: 'Địa điểm tập luyện',
       seeMap: 'Xem bản đồ và chỉ đường',
       announcements: 'Thông tin & Thông báo',
@@ -118,6 +125,9 @@ export const strings = {
       instructors: 'Huấn luyện viên',
       contact: 'Liên hệ',
       fees: 'Học phí',
+    },
+    about: {
+      photoAlt: 'Các môn sinh Tenshinkai Aikido mặc hakama, cầm giấy chứng nhận đẳng cấp tại võ đường',
     },
     schedule: {
       day: 'Ngày',
@@ -141,6 +151,10 @@ export const strings = {
       directions: 'Chỉ đường',
       mapTitle: 'Bản đồ vị trí võ đường',
       newTab: '(mở trong thẻ mới)',
+    },
+    content: {
+      loading: 'Đang tải…',
+      error: 'Xin lỗi, không thể tải mục này. Vui lòng thử lại sau.',
     },
     footer: {
       rights: 'Bảo lưu mọi quyền.',

@@ -190,3 +190,9 @@ select {
   margin-top: var(--space-2);
   font-style: italic;
 }
+
+/* Loading / error message inside a section (see ContentStatus). Inherits the
+   section's text color, so it keeps the contrast of its surface. */
+.content-status {
+  font-style: italic;
+}

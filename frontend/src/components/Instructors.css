@@ -60,15 +60,28 @@
   cursor: default;
 }
 
+/* Phones: one wide card centered on screen, snapping to the center on each
+   swipe, with a sliver of the neighbours showing on both sides.
+   --card-width sets the card size; the inset centers the first and last card. */
 .instructors__track {
-  /* Lines the first card up with the heading, which uses the same gutter. */
-  --track-inset: var(--gutter);
+  --card-width: min(84vw, 26.5rem);
+  --track-inset: calc((100% - var(--card-width)) / 2);
+  --card-snap: center;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
-  scroll-padding-inline: var(--track-inset);
   /* Room for the focus ring and card shadows. */
   padding-block: var(--space-2) var(--space-4);
+}
+
+/* Tablet and up: several cards in a row, starting in line with the heading. */
+@media (min-width: 48rem) {
+  .instructors__track {
+    --card-width: min(78vw, 26.5rem);
+    --track-inset: var(--gutter);
+    --card-snap: start;
+    scroll-padding-inline: var(--track-inset);
+  }
 }
 
 .instructors__track:focus-visible {
@@ -85,11 +98,11 @@
 }
 
 .instructor-card {
-  width: min(78vw, 26.5rem);
+  width: var(--card-width);
   padding: var(--space-5);
   border-radius: var(--radius-md);
   background: var(--color-charcoal);
-  scroll-snap-align: start;
+  scroll-snap-align: var(--card-snap);
   color: var(--color-white);
 }
 

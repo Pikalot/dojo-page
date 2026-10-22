@@ -2,8 +2,8 @@
   position: relative;
   display: grid;
   align-items: end;
-  min-height: min(88vh, 46rem);
-  min-height: min(88svh, 46rem);
+  min-height: min(88vh, 60rem);
+  min-height: min(88svh, 60rem);
   padding-top: var(--header-height);
   overflow: hidden;
   background: var(--color-charcoal);

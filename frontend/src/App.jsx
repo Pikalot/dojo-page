@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
 import { About } from './components/About.jsx';
+import { SubAbout } from './components/SubAbout.jsx';
 import { Announcements } from './components/Announcements.jsx';
 import { Contact } from './components/Contact.jsx';
 import { Fees } from './components/Fees.jsx';
@@ -8,12 +8,11 @@ import { Hero } from './components/Hero.jsx';
 import { Instructors } from './components/Instructors.jsx';
 import { Navbar } from './components/Navbar.jsx';
 import { Schedule } from './components/Schedule.jsx';
-import { getSiteContent } from './data/siteContent.js';
 import { useLanguage } from './i18n/LanguageContext.jsx';
 
+// Page layout only. Each section loads its own content from api/content.js.
 export function App() {
-  const { language, t } = useLanguage();
-  const content = useMemo(() => getSiteContent(language), [language]);
+  const { t } = useLanguage();
 
   return (
     <>
@@ -23,18 +22,19 @@ export function App() {
       <Navbar />
       <main id="main" tabIndex={-1}>
         <Hero />
-        <About about={content.about} location={content.location} />
+        <About />
+        <SubAbout />
         <div className="split">
-          <Announcements items={content.announcements} />
-          <Schedule classes={content.schedule} />
+          <Announcements />
+          <Schedule />
         </div>
-        <Instructors instructors={content.instructors} />
+        <Instructors />
         <div className="split">
-          <Contact contact={content.contact} location={content.location} />
-          <Fees fees={content.fees} note={content.feesNote} />
+          <Contact />
+          <Fees />
         </div>
       </main>
-      <Footer dojoName={content.dojo.name} />
+      <Footer />
     </>
   );
 }

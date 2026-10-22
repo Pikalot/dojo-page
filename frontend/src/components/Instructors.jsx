@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { getInstructors } from '../api/content.js';
+import { useContent } from '../hooks/useContent.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { toParagraphs } from '../lib/text.js';
+import { ContentStatus } from './ContentStatus.jsx';
 import './Instructors.css';
 
 /**
@@ -7,8 +11,9 @@ import './Instructors.css';
  * trackpad, the arrow buttons, or the keyboard (the row is focusable, so
  * arrow keys scroll it natively).
  */
-export function Instructors({ instructors }) {
+export function Instructors() {
   const { t } = useLanguage();
+  const { status, data: instructors } = useContent(getInstructors);
   const trackRef = useRef(null);
   const [canScroll, setCanScroll] = useState({ back: false, forward: false });
 
@@ -75,6 +80,10 @@ export function Instructors({ instructors }) {
         </div>
       </div>
 
+      <div className="container">
+        <ContentStatus status={status} />
+      </div>
+
       {/* Focusable so keyboard users can scroll it with the arrow keys. */}
       <div
         id="instructor-track"
@@ -85,7 +94,7 @@ export function Instructors({ instructors }) {
         tabIndex={0}
       >
         <ul className="instructors__list">
-          {instructors.map((person) => (
+          {instructors?.map((person) => (
             <li key={person.id} className="instructor-card">
               <div className="instructor-card__photo">
                 {/* PLACEHOLDER: generic silhouette until real photos are supplied. */}
@@ -98,7 +107,11 @@ export function Instructors({ instructors }) {
               <p className="instructor-card__meta">
                 {person.role} · {person.rank}
               </p>
-              <p className="instructor-card__bio">{person.bio}</p>
+              {toParagraphs(person.bio).map((text, i) => (
+                <p key={i} className="instructor-card__bio">
+                  {text}
+                </p>
+              ))}
             </li>
           ))}
         </ul>

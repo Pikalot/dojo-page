@@ -18,6 +18,13 @@
 
 .about__text {
   font-size: var(--text-lg);
+  text-align: center;
+}
+
+@media (min-width: 48rem) {
+  .about__text {
+    font-size: 1.25rem;               /* 20px from tablet width up */
+  }
 }
 
 .about__text + .about__text {

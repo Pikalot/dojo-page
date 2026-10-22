@@ -27,6 +27,13 @@ describe('App', () => {
     }
   });
 
+  it('shows each section\'s content once loaded, with paragraphs split from plain text', async () => {
+    renderWithLanguage(<App />);
+    expect(await screen.findByText(/Tenshinkai Aikido San Jose aims to introduce/)).toBeInTheDocument();
+    expect(await screen.findAllByRole('cell', { name: /Adults \(all levels\)/ })).toHaveLength(2);
+    expect(screen.queryByText('Loading…')).not.toBeInTheDocument();
+  });
+
   it('has a skip link that targets the main landmark', () => {
     renderWithLanguage(<App />);
     const skip = screen.getByRole('link', { name: 'Skip to main content' });
@@ -36,12 +43,13 @@ describe('App', () => {
 
   it.each(['en', 'vi'])('has no detectable accessibility violations (%s)', async (language) => {
     const { container } = renderWithLanguage(<App />, { language });
+    await screen.findAllByRole('table'); // wait for section content to load
     expect(await axeViolations(container)).toEqual([]);
   });
 
-  it('marks the external directions link as opening a new tab', () => {
+  it('marks the external directions link as opening a new tab', async () => {
     renderWithLanguage(<App />);
-    const link = screen.getByRole('link', { name: /get directions/i });
+    const link = await screen.findByRole('link', { name: /get directions/i });
     expect(link).toHaveAttribute('target', '_blank');
     expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
     expect(link).toHaveAccessibleName(/opens in a new tab/);
