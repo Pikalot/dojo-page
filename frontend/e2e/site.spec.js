@@ -96,6 +96,9 @@ test('keyboard search jumps to a section and focuses its heading', async ({ page
 test('instructor row scrolls sideways', async ({ page }, testInfo) => {
   const track = page.getByRole('region', { name: 'Instructor profiles' });
   await track.scrollIntoViewIfNeeded();
+  // How many instructors there are is content, so the row may fit without scrolling.
+  const overflows = await track.evaluate((el) => el.scrollWidth > el.clientWidth);
+  test.skip(!overflows, 'Too few instructors to overflow the row');
   const before = await track.evaluate((el) => el.scrollLeft);
 
   if (isMobile(testInfo)) {

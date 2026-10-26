@@ -1,5 +1,5 @@
 #!/bin/sh
-# Regenerates responsive hero images from the original in assets-src/.
+# Regenerates the hero images and the logo from the originals in assets-src/.
 # Requires macOS `sips` (built in) and `cwebp` (brew install webp).
 # Outputs are committed, so this only needs to run when the source image changes.
 set -eu
@@ -18,3 +18,10 @@ for WIDTH in 640 1024 1600; do
 done
 
 ls -lh "$OUT"
+
+# Logo: shown at up to 4rem (64px), so 200px covers screens up to 3x pixel density.
+LOGO_TMP="src/assets/logo-tmp.png"
+sips -s format png --resampleWidth 200 "assets-src/logo.jpg" --out "$LOGO_TMP" >/dev/null
+cwebp -quiet -q 85 "$LOGO_TMP" -o "src/assets/logo.webp"
+rm "$LOGO_TMP"
+ls -lh src/assets/logo.webp

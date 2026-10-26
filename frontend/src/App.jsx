@@ -1,5 +1,4 @@
 import { About } from './components/About.jsx';
-import { SubAbout } from './components/SubAbout.jsx';
 import { Announcements } from './components/Announcements.jsx';
 import { Contact } from './components/Contact.jsx';
 import { Fees } from './components/Fees.jsx';
@@ -23,7 +22,6 @@ export function App() {
       <main id="main" tabIndex={-1}>
         <Hero />
         <About />
-        <SubAbout />
         <div className="split">
           <Announcements />
           <Schedule />

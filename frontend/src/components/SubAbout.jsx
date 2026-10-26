@@ -27,7 +27,7 @@ export function SubAbout() {
             </p>
           ))}
 
-        {location.data && (
+        {/* {location.data && (
           <div className="about__location">
             <h3 className="about__subtitle">{t.sections.whereWeTrain}</h3>
             <address className="about__address">
@@ -41,7 +41,7 @@ export function SubAbout() {
               {t.sections.seeMap}
             </SectionLink>
           </div>
-        )}
+        )} */}
       </div>
     </section>
   );
