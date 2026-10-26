@@ -68,6 +68,9 @@
    picks the effect (PHOTO_EFFECT in Dojo.jsx). */
 .about__photo-frame {
   overflow: hidden;                 /* crops the zoomed photo to the frame */
+  margin-top: 2rem;
+  max-width: 50rem;
+  margin-inline: auto;
 }
 
 .about__photo {
@@ -98,9 +101,13 @@
   clip-path: inset(0);
 }
 
+#sub-about {
+  padding-top: var(--space-2);
+}
+
 /* Skip the effect for visitors who ask for less motion. */
 @media (prefers-reduced-motion: reduce) {
-  .about__photo-frame .about__photo {
+  .about__photo-frame[data-effect] .about__photo {
     opacity: 1;
     transform: none;
     clip-path: none;

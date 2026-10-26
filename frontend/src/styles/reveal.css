@@ -1,0 +1,38 @@
+/* Scroll reveal: a .reveal element pops up (fades in while rising and growing
+   to full size) when useInView sets data-visible to true, and hides again when
+   scrolled away so it replays next time. --reveal-index delays it, so panels
+   side by side arrive one after the other. */
+.reveal {
+  opacity: 0;
+}
+
+/* Fill mode "backwards" (not "both") so the animation lets go when it ends;
+   otherwise its final transform would block hover effects such as the
+   billboard lift. The visible state itself comes from the opacity below. */
+.reveal[data-visible='true'] {
+  opacity: 1;
+  animation: reveal-pop 750ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--reveal-index, 0) * 150ms);
+}
+
+@keyframes reveal-pop {
+  from {
+    opacity: 0;
+    transform: translateY(2.5rem) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Skip the effect for visitors who ask for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+  }
+
+  .reveal[data-visible='true'] {
+    animation: none;
+  }
+}

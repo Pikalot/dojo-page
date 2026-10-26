@@ -6,6 +6,39 @@
   background: var(--color-grey-100);
 }
 
+/* Billboard panels lift toward the viewer on hover, as if picked up: a little
+   larger, raised, with a deeper and softer shadow. They also tilt toward the
+   pointer using --tilt-x/--tilt-y from useTilt (App.jsx); without it they
+   default to 0deg and lift flat. Only for devices that can hover, so touch
+   screens never get stuck in the lifted state. */
+@media (hover: hover) and (pointer: fine) {
+  .billboard > * {
+    position: relative;               /* lets z-index lift it above its neighbor */
+    transition:
+      transform 400ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .billboard > *:hover {
+    z-index: 1;
+    transform:
+      perspective(60rem)
+      translateY(-0.5rem)
+      scale(1.03)
+      rotateX(var(--tilt-x, 0deg))
+      rotateY(var(--tilt-y, 0deg));
+    box-shadow:
+      0 0.75rem 1.5rem rgb(0 0 0 / 0.2),
+      0 2rem 3.5rem rgb(0 0 0 / 0.25);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .billboard > * {
+    transition: none;
+  }
+}
+
 /* Grid items default to min-width: auto, which lets wide tables push the
    column past the viewport on phones. */
 .split > * {

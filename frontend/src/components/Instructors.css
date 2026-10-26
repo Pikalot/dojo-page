@@ -139,3 +139,118 @@
 .instructor-card__bio {
   font-size: var(--text-sm);
 }
+
+/* The whole card opens the profile: the name button's click area is stretched
+   over the card. A real button (not a clickable <li>) so keyboard and screen
+   reader users can open it too. */
+.instructor-card {
+  position: relative;
+  cursor: pointer;
+}
+
+.instructor-card__open {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.instructor-card__open::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+/* Instructor profile modal (<dialog> opened with showModal()). */
+.instructor-modal {
+  width: min(34rem, 100% - 2 * var(--gutter));
+  max-height: min(88vh, 48rem);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-charcoal);
+  color: var(--color-white);
+  box-shadow: 0 2rem 4rem rgb(0 0 0 / 0.45);
+  overflow: auto;
+}
+
+.instructor-modal::backdrop {
+  background: rgb(0 0 0 / 0.6);
+}
+
+.instructor-modal[open] {
+  animation: reveal-pop 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.instructor-modal[open]::backdrop {
+  animation: instructor-modal-fade 350ms ease;
+}
+
+@keyframes instructor-modal-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Keep the page behind still while a profile is open. */
+body:has(.instructor-modal[open]) {
+  overflow: hidden;
+}
+
+.instructor-modal__body {
+  position: relative;
+  padding: var(--space-7) var(--space-5) var(--space-6);
+}
+
+.instructor-modal__close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.instructor-modal__close:hover {
+  background: rgb(255 255 255 / 0.12);
+}
+
+.instructor-modal__close svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.instructor-modal .instructor-card__photo {
+  width: 45%;
+}
+
+.instructor-modal__name {
+  font-size: var(--text-2xl);
+  color: var(--color-orange);
+  text-align: center;
+}
+
+.instructor-modal__meta {
+  text-align: center;
+}
+
+.instructor-modal__bio + .instructor-modal__bio {
+  margin-top: var(--space-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .instructor-modal[open],
+  .instructor-modal[open]::backdrop {
+    animation: none;
+  }
+}

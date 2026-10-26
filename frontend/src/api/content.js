@@ -8,6 +8,7 @@
 // Translatable fields come back as { en, vi }; useContent() picks the language.
 
 import about from '../data/mock/about.json';
+import subcontent from '../data/mock/subcontent.json';
 import announcements from '../data/mock/announcements.json';
 import contact from '../data/mock/contact.json';
 import fees from '../data/mock/fees.json';
@@ -26,3 +27,4 @@ export const getAnnouncements = () => mock(announcements);
 export const getSchedule = () => mock(schedule);
 export const getFees = () => mock(fees);
 export const getInstructors = () => mock(instructors);
+export const getSubcontent = () => mock(subcontent);

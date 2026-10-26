@@ -1,0 +1,31 @@
+.divider {
+  --divider-line: color-mix(in srgb, var(--color-maroon) 35%, transparent);
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: min(40rem, 100% - 2 * var(--gutter));
+  margin: var(--space-4) auto;
+}
+
+/* Hairlines fade out toward the outer edges. */
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1rem;
+  background: linear-gradient(to right, transparent, var(--divider-line));
+}
+
+.divider::after {
+  background: linear-gradient(to left, transparent, var(--divider-line));
+}
+
+/* Muted so the mark separates sections without competing with them. */
+.divider__mark {
+  flex: none;
+  width: 5rem;
+  height: 5rem;
+  object-fit: contain;
+  opacity: 0.85;
+}

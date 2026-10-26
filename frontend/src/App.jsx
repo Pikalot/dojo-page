@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { About } from './components/About.jsx';
 import { Announcements } from './components/Announcements.jsx';
 import { Contact } from './components/Contact.jsx';
@@ -7,11 +8,14 @@ import { Hero } from './components/Hero.jsx';
 import { Instructors } from './components/Instructors.jsx';
 import { Navbar } from './components/Navbar.jsx';
 import { Schedule } from './components/Schedule.jsx';
+import { useTilt } from './hooks/useTilt.js';
 import { useLanguage } from './i18n/LanguageContext.jsx';
 
 // Page layout only. Each section loads its own content from api/content.js.
 export function App() {
   const { t } = useLanguage();
+  const billboardRef = useRef(null);
+  useTilt(billboardRef); // remove for a flat lift without tilt
 
   return (
     <>
@@ -22,7 +26,7 @@ export function App() {
       <main id="main" tabIndex={-1}>
         <Hero />
         <About />
-        <div className="split">
+        <div ref={billboardRef} className="split billboard">
           <Announcements />
           <Schedule />
         </div>

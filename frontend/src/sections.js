@@ -42,12 +42,12 @@ export const SECTIONS = [
       vi: ['email', 'điện thoại', 'tin nhắn', 'bản đồ', 'chỉ đường', 'địa chỉ'],
     },
   },
-  {
-    id: 'fees',
-    navKey: 'fees',
-    keywords: {
-      en: ['price', 'pricing', 'cost', 'membership', 'tuition', 'dues'],
-      vi: ['giá', 'phí', 'hội phí', 'chi phí'],
-    },
-  },
+  // {
+  //   id: 'fees',
+  //   navKey: 'fees',
+  //   keywords: {
+  //     en: ['price', 'pricing', 'cost', 'membership', 'tuition', 'dues'],
+  //     vi: ['giá', 'phí', 'hội phí', 'chi phí'],
+  //   },
+  // },
 ];

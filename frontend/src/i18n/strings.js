@@ -36,12 +36,13 @@ export const strings = {
     },
     hero: {
       title: 'Tenshinkai Aikido',
-      tagline: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      tagline: 'True victory is victory over oneself.',
       primaryCta: 'View schedule',
       secondaryCta: 'Contact us',
     },
     sections: {
       about: 'Tenshinkai Aikido San Jose',
+      subcontent: '',
       whereWeTrain: 'Where we train',
       seeMap: 'See map and directions',
       announcements: 'Info & Announcements',
@@ -67,6 +68,7 @@ export const strings = {
       next: 'Scroll to next instructors',
       listLabel: 'Instructor profiles',
       photoPlaceholder: (name) => `Placeholder photo for ${name}`,
+      close: 'Close',
     },
     contact: {
       address: 'Address',
@@ -112,12 +114,13 @@ export const strings = {
     },
     hero: {
       title: 'Aikido Tenshinkai',
-      tagline: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      tagline: 'Hệ phái Aikido dành cho người Việt.',
       primaryCta: 'Xem lịch tập',
       secondaryCta: 'Liên hệ',
     },
     sections: {
-      about: 'Tenshinkai Aikido San Jose',
+      about: 'Aikido Tenshinkai San Jose',
+      subcontent: '',
       whereWeTrain: 'Địa điểm tập luyện',
       seeMap: 'Xem bản đồ và chỉ đường',
       announcements: 'Thông tin & Thông báo',
@@ -143,6 +146,7 @@ export const strings = {
       next: 'Cuộn đến huấn luyện viên tiếp theo',
       listLabel: 'Hồ sơ huấn luyện viên',
       photoPlaceholder: (name) => `Ảnh tạm thời của ${name}`,
+      close: 'Đóng',
     },
     contact: {
       address: 'Địa chỉ',
