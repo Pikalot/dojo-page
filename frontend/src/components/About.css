@@ -62,3 +62,48 @@
   color: var(--color-maroon);
   font-weight: var(--weight-bold);
 }
+
+/* Dojo photo entrance effect, played when scrolled into view and reversed when
+   scrolled away. data-visible is set by useInView in Dojo.jsx; data-effect
+   picks the effect (PHOTO_EFFECT in Dojo.jsx). */
+.about__photo-frame {
+  overflow: hidden;                 /* crops the zoomed photo to the frame */
+}
+
+.about__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* "zoom": fades in slightly zoomed, then settles to normal size. */
+.about__photo-frame[data-effect='zoom'] .about__photo {
+  opacity: 0;
+  transform: scale(1.15);
+  transition:
+    opacity 600ms ease,
+    transform 1600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* "wipe": opens from the center outward like shoji doors, using the same
+   easing as the hero doors. */
+.about__photo-frame[data-effect='wipe'] .about__photo {
+  clip-path: inset(0 50%);
+  transition: clip-path 1200ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.about__photo-frame[data-visible='true'] .about__photo {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0);
+}
+
+/* Skip the effect for visitors who ask for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .about__photo-frame .about__photo {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+    transition: none;
+  }
+}
