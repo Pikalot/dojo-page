@@ -195,3 +195,26 @@
 .button--light:hover {
   background: var(--color-grey-100);
 }
+
+/* Contact: text on the left and the map (about half its old width) on the
+   right once the panel is wide enough; stacked on narrow panels. Based on the
+   panel's own width, since it sits beside Fees on wider screens. */
+#contact {
+  container-type: inline-size;
+}
+
+.contact-layout {
+  display: grid;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+@container (min-width: 34rem) {
+  .contact-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.contact-layout__text > :first-child {
+  margin-top: 0;
+}

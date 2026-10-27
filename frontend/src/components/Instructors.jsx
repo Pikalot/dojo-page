@@ -130,11 +130,13 @@ export function Instructors() {
               <p className="instructor-card__meta">
                 {person.role} · {person.rank}
               </p>
-              {toParagraphs(person.bio).map((text, i) => (
-                <p key={i} className="instructor-card__bio">
-                  {text}
-                </p>
-              ))}
+              <div className="instructor-card__bio-wrap">
+                {toParagraphs(person.bio).map((text, i) => (
+                  <p key={i} className="instructor-card__bio">
+                    {text}
+                  </p>
+                ))}
+              </div>
             </li>
           ))}
         </ul>

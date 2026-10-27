@@ -24,68 +24,77 @@ export function Contact() {
         {t.sections.contact}
       </h2>
       <ContentStatus status={contact.status} />
-      {contact.data && (
-        <>
-          {toParagraphs(contact.data.intro).map((text, i) => (
-            <p key={i}>{text}</p>
-          ))}
+      {/* Text on the left, map on the right when the panel is wide enough;
+          stacked otherwise (see .contact-layout in panels.css). */}
+      <div className="contact-layout">
+        {contact.data && (
+          <div className="contact-layout__text">
+            {toParagraphs(contact.data.intro).map((text, i) => (
+              <p key={i}>{text}</p>
+            ))}
 
-          <dl className="contact-details">
-            {location.data && (
+            <dl className="contact-details">
+              {location.data && (
+                <div>
+                  <dt>{t.contact.address}</dt>
+                  <dd>
+                    <address>
+                      {addressLines.map((line) => (
+                        <span key={line}>{line}</span>
+                      ))}
+                    </address>
+                  </dd>
+                </div>
+              )}
               <div>
-                <dt>{t.contact.address}</dt>
+                <dt>{t.contact.phone}</dt>
                 <dd>
-                  <address>
-                    {addressLines.map((line) => (
-                      <span key={line}>{line}</span>
-                    ))}
-                  </address>
+                  <a href={`tel:${contact.data.phone.replace(/[^\d+]/g, '')}`}>{contact.data.phone}</a>
                 </dd>
               </div>
-            )}
-            <div>
-              <dt>{t.contact.phone}</dt>
-              <dd>
-                <a href={`tel:${contact.data.phone.replace(/[^\d+]/g, '')}`}>{contact.data.phone}</a>
-              </dd>
-            </div>
-            <div>
-              <dt>{t.contact.email}</dt>
-              <dd>
-                <a href={`mailto:${contact.data.email}`}>{contact.data.email}</a>
-              </dd>
-            </div>
-          </dl>
-        </>
-      )}
-
-      {location.data && (
-        <>
-          {/* The embed loads only when scrolled near, so Google is not contacted on first paint. */}
-          <div className="map-frame">
-            <iframe
-              title={t.contact.mapTitle}
-              src={mapsEmbedUrl(mapQuery)}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              allowFullScreen
-            />
+              <div>
+                <dt>{t.contact.email}</dt>
+                <dd>
+                  <a href={`mailto:${contact.data.email}`}>{contact.data.email}</a>
+                </dd>
+              </div>
+              <div>
+                <dt>{t.contact.facebook}</dt>
+                <dd>
+                  <a href={`${contact.data.facebook}`}>{contact.data.facebook}</a>
+                </dd>
+              </div>
+            </dl>
           </div>
+        )}
 
-          {/* Block wrapper so the button follows the panel's centered reading width. */}
-          <p>
-            <a
-              className="button button--light"
-              href={mapsDirectionsUrl(mapQuery)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t.contact.directions}
-              <span className="visually-hidden"> {t.contact.newTab}</span>
-            </a>
-          </p>
-        </>
-      )}
+        {location.data && (
+          <div className="contact-layout__map">
+            {/* The embed loads only when scrolled near, so Google is not contacted on first paint. */}
+            <div className="map-frame">
+              <iframe
+                title={t.contact.mapTitle}
+                src={mapsEmbedUrl(mapQuery)}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+            </div>
+
+            <p>
+              <a
+                className="button button--light"
+                href={mapsDirectionsUrl(mapQuery)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t.contact.directions}
+                <span className="visually-hidden"> {t.contact.newTab}</span>
+              </a>
+            </p>
+          </div>
+        )}
+      </div>
     </section>
   );
 }

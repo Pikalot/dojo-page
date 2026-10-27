@@ -131,7 +131,7 @@ select {
 
 .surface-blue {
   --focus-color: #ffd166;
-  background: var(--color-blue);
+  background: var(--color-navy);
   color: var(--color-white);
 }
 

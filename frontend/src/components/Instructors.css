@@ -97,11 +97,19 @@
   list-style: none;
 }
 
+/* Trading-card proportions (5:7): the height follows the width. Content that
+   does not fit is cut off by the bio fade below; the modal shows it in full.
+   min-height: 0 keeps the ratio even when the content is taller. */
 .instructor-card {
+  display: flex;
+  flex-direction: column;
   width: var(--card-width);
+  aspect-ratio: 5 / 7;
+  min-height: 0;
+  overflow: hidden;
   padding: var(--space-5);
   border-radius: var(--radius-md);
-  background: var(--color-charcoal);
+  background: var(--color-navy);
   scroll-snap-align: var(--card-snap);
   color: var(--color-white);
 }
@@ -140,6 +148,19 @@
   font-size: var(--text-sm);
 }
 
+/* The bio takes whatever room is left on the card and fades out where it is
+   cut off, at any card size. */
+.instructor-card__bio-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, #000 70%, transparent);
+}
+
+.instructor-card__bio + .instructor-card__bio {
+  margin-top: var(--space-2);
+}
+
 /* The whole card opens the profile: the name button's click area is stretched
    over the card. A real button (not a clickable <li>) so keyboard and screen
    reader users can open it too. */
@@ -172,7 +193,7 @@
   padding: 0;
   border: 0;
   border-radius: var(--radius-lg);
-  background: var(--color-charcoal);
+  background: var(--color-navy);
   color: var(--color-white);
   box-shadow: 0 2rem 4rem rgb(0 0 0 / 0.45);
   overflow: auto;
