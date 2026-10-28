@@ -12,7 +12,7 @@ export const DEFAULT_LANGUAGE = 'en';
 export const strings = {
   en: {
     meta: {
-      title: 'Tenshinkai Aikido Dojo',
+      title: 'Tenshinkai Aikido Dojo in San Jose',
     },
     nav: {
       label: 'Main',
