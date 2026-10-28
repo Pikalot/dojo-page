@@ -29,7 +29,7 @@ beforeEach(() => {
 async function openFirstProfile() {
   const user = userEvent.setup();
   renderWithLanguage(<Instructors />);
-  const [person] = content.getInstructors;
+  const [person] = content.getInstructors.instructors;
   await user.click(await screen.findByRole('button', { name: person.name }));
   return { user, person };
 }
@@ -53,10 +53,21 @@ describe('Instructors', () => {
 
   it("shows an instructor's photo, or the dojo logo when there is none", async () => {
     renderWithLanguage(<Instructors />);
-    const [withPhoto, withoutPhoto] = content.getInstructors;
+    const [withPhoto, withoutPhoto] = content.getInstructors.instructors;
 
     const photo = await screen.findByRole('img', { name: t.instructors.photoAlt(withPhoto.name) });
     expect(photo).toHaveAttribute('src', withPhoto.photo);
     expect(screen.queryByRole('img', { name: t.instructors.photoAlt(withoutPhoto.name) })).not.toBeInTheDocument();
+  });
+
+  it('lists black belts by name instead of on instructor cards', async () => {
+    renderWithLanguage(<Instructors />);
+    const names = content.getInstructors.blackBelts.flatMap(({ members }) => members.map(({ name }) => name));
+
+    const list = (await screen.findByRole('heading', { name: t.instructors.blackBelts })).parentElement;
+    for (const name of names) {
+      expect(within(list).getByText(name)).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name })).not.toBeInTheDocument();
+    }
   });
 });

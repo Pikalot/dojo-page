@@ -42,15 +42,21 @@ export function makeContent() {
       question: translated(`Question ${n}`),
       answer: paragraphs(`Answer ${n}`, 1),
     })),
-    getInstructors: list(3, (n) => ({
-      id: `instructor-${n}`,
-      name: `Instructor ${n}`,
-      // Optional: only the first instructor has a photo.
-      ...(n === 1 && { photo: `/instructor-${n}.jpg` }),
-      role: translated(`Role ${n}`),
-      rank: translated(`Rank ${n}`),
-      bio: paragraphs(`Bio ${n}`, 1),
-    })),
+    getInstructors: {
+      instructors: list(3, (n) => ({
+        id: `instructor-${n}`,
+        name: `Instructor ${n}`,
+        // Optional: only the first instructor has a photo.
+        ...(n === 1 && { photo: `/instructor-${n}.jpg` }),
+        role: translated(`Role ${n}`),
+        rank: translated(`Rank ${n}`),
+        bio: paragraphs(`Bio ${n}`, 1),
+      })),
+      blackBelts: list(2, (n) => ({
+        rank: translated(`Black belt rank ${n}`),
+        members: list(2, (m) => ({ id: `black-belt-${n}-${m}`, name: `Black belt ${n}-${m}` })),
+      })),
+    },
     getDojoPhotos: list(3, (n) => ({
       id: `photo-${n}`,
       src: `/photo-${n}.jpg`,

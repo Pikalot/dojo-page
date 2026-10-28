@@ -18,11 +18,13 @@ describe('content API (mock)', () => {
   });
 
   it('gives every list item a unique id', async () => {
+    const { instructors, blackBelts } = await api.getInstructors();
     const lists = [
       await api.getAnnouncements(),
       await api.getSchedule(),
       await api.getFaq(),
-      await api.getInstructors(),
+      // Instructors and black belts are one roster, so ids are unique across both.
+      [...instructors, ...blackBelts.flatMap((group) => group.members)],
       await api.getDojoPhotos(),
     ];
     for (const list of lists) {

@@ -1,8 +1,9 @@
 [
-  { "id": "s1", "day": { "en": "Monday", "vi": "Thứ Hai" }, "start": "19:00", "end": "20:30", "className": { "en": "All levels", "vi": "Mọi cấp đai" } },
-  { "id": "s2", "day": { "en": "Tuesday", "vi": "Thứ Ba" }, "start": "19:00", "end": "20:30", "className": { "en": "Adults", "vi": "Người lớn" } },
-  { "id": "s3", "day": { "en": "Wednesday", "vi": "Thứ Tư" }, "start": "19:00", "end": "20:30", "className": { "en": "All levels", "vi": "Mọi cấp đai" } },
-  { "id": "s4", "day": { "en": "Thursday", "vi": "Thứ Năm" }, "start": "19:00", "end": "20:30", "className": { "en": "Adults", "vi": "Người lớn" } },
-  { "id": "s5", "day": { "en": "Friday", "vi": "Thứ Sáu" }, "start": "19:00", "end": "20:30", "className": { "en": "All levels", "vi": "Mọi cấp đai" } },
-  { "id": "s6", "day": { "en": "Sunday", "vi":"Chủ Nhật"}, "start": "08:00", "end": "09:30", "className": { "en": "Black Belts", "vi": "Huyền đai"} }
+  { "id": "s1", "day": { "en": "Monday", "vi": "Thứ Hai" }, "start": "19:00", "end": "20:30", "className": { "en": "Kids", "vi": "Trẻ em" } },
+  { "id": "s2", "day": { "en": "Tuesday", "vi": "Thứ Ba" }, "start": "19:00", "end": "20:30", "className": { "en": "Teens & Adults", "vi": "Thanh thiếu niên và người lớn" } },
+  { "id": "s3", "day": { "en": "Wednesday", "vi": "Thứ Tư" }, "start": "19:00", "end": "20:30", "className": { "en": "Kids", "vi": "Trẻ em" } },
+  { "id": "s4", "day": { "en": "Thursday", "vi": "Thứ Năm" }, "start": "19:00", "end": "20:30", "className": { "en": "Teens & Adults", "vi": "Thanh thiếu niên và người lớn" } },
+  { "id": "s5", "day": { "en": "Friday", "vi": "Thứ Sáu" }, "start": "19:00", "end": "20:30", "className": { "en": "Kids", "vi": "Trẻ em" } },
+  { "id": "s6", "day": { "en": "Saturday", "vi": "Thứ Bảy" }, "start": "08:00", "end": "09:30", "className": { "en": "Teens & Adults", "vi": "Thanh thiếu niên và người lớn" } },
+  { "id": "s7", "day": { "en": "Sunday", "vi": "Chủ Nhật" }, "start": "08:00", "end": "09:30", "className": { "en": "Black Belts", "vi": "Huyền đai" } }
 ]

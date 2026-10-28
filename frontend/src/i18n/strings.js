@@ -68,6 +68,7 @@ export const strings = {
       listLabel: 'Instructor profiles',
       photoAlt: (name) => `Photo of ${name}`,
       close: 'Close',
+      blackBelts: 'Black Belts',
     },
     contact: {
       address: 'Address',
@@ -146,6 +147,7 @@ export const strings = {
       listLabel: 'Hồ sơ huấn luyện viên',
       photoAlt: (name) => `Ảnh của ${name}`,
       close: 'Đóng',
+      blackBelts: 'Đai đen',
     },
     contact: {
       address: 'Địa chỉ',

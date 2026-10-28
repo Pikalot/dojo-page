@@ -6,6 +6,7 @@ import { toParagraphs } from '../lib/text.js';
 import { ContentStatus } from './ContentStatus.jsx';
 import './Instructors.css';
 import { useTilt } from '../hooks/useTilt.js';
+import { useInView } from '../hooks/useInView.js';
 import tenshinkaiLogo from '../assets/tenshinkai-logo.svg';
 
 /**
@@ -15,7 +16,10 @@ import tenshinkaiLogo from '../assets/tenshinkai-logo.svg';
  */
 export function Instructors() {
   const { t } = useLanguage();
-  const { status, data: instructors } = useContent(getInstructors);
+  const { status, data } = useContent(getInstructors);
+  // Teaching staff get cards; every other black belt goes in the list below.
+  const instructors = data?.instructors;
+  const blackBelts = data?.blackBelts;
   const trackRef = useRef(null);
   const [canScroll, setCanScroll] = useState({ back: false, forward: false });
   const billboardRef = useRef(null)
@@ -129,7 +133,9 @@ export function Instructors() {
                 </button>
               </h3>
               <p className="instructor-card__meta">
-                {person.role} · {person.rank}
+                {person.role}
+                <br/>
+                {person.rank}
               </p>
               <div className="instructor-card__bio-wrap">
                 {toParagraphs(person.bio).map((text, i) => (
@@ -142,6 +148,8 @@ export function Instructors() {
           ))}
         </ul>
       </div>
+
+      {blackBelts?.length > 0 && <BlackBelts groups={blackBelts} />}
 
       <dialog
         ref={dialogRef}
@@ -178,6 +186,52 @@ export function Instructors() {
         )}
       </dialog>
     </section>
+  );
+}
+
+/**
+ * Every black belt who is not on a card, already grouped by rank and in
+ * order by the API.
+ */
+function BlackBelts({ groups }) {
+  const { t } = useLanguage();
+  const billboardRef = useRef(null);
+  useTilt(billboardRef);
+  const separatorRef = useRef(null);
+  const separatorInView = useInView(separatorRef, 0.6);
+  const groupsInView = useInView(billboardRef, 0.1);
+
+  return (
+    <div className="black-belts container">
+      {/* Decorative: the throw plays as a quick strike each time it scrolls into view. */}
+      <div
+        ref={separatorRef}
+        className="black-belts__separator"
+        data-visible={separatorInView}
+        aria-hidden="true"
+      >
+        <span className="black-belts__art" />
+      </div>
+      <h2 className="black-belts__title">{t.instructors.blackBelts}</h2>
+      <div className="black-belts__groups billboard" ref={billboardRef}>
+        {/* Same pop-up as the panels above, one box after another. */}
+        {groups.map(({ rank, members }, i) => (
+          <div
+            key={rank}
+            className="black-belts__group reveal"
+            data-visible={groupsInView}
+            style={{ '--reveal-index': i }}
+          >
+            <h3 className="black-belts__rank">{rank}</h3>
+            <ul className="black-belts__names">
+              {members.map(({ id, name }) => (
+                <li key={id}>{name}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 

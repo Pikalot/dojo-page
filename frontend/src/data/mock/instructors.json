@@ -1,419 +1,182 @@
-[
-  {
-    "id": "i1",
-    "name": "Dac Le",
-    "role": {
-      "en": "Head of Dojo",
-      "vi": "Đạo Trường Trưởng"
+{
+  "instructors": [
+    {
+      "id": "i1",
+      "name": "Dac Le",
+      "role": {
+        "en": "Head of Dojo",
+        "vi": "Đạo Trường Trưởng"
+      },
+      "rank": {
+        "en": "Godan",
+        "vi": "Ngũ đẳng"
+      },
+      "bio": {
+        "en": "",
+        "vi": ""
+      }
     },
-    "rank": {
-      "en": "Godan",
-      "vi": "Ngũ đẳng"
+    {
+      "id": "i2",
+      "name": "Darrick Le",
+      "role": {
+        "en": "Head Instructor",
+        "vi": "Huấn luyện viên trưởng"
+      },
+      "rank": {
+        "en": "Yondan",
+        "vi": "Tứ đẳng"
+      },
+      "bio": {
+        "en": "",
+        "vi": ""
+      }
     },
-    "bio": {
-      "en": "",
-      "vi": ""
+    {
+      "id": "i3",
+      "name": "Thinh Vu",
+      "role": {
+        "en": "Instructor - Head of Internal Affairs",
+        "vi": "HLV - Trưởng ban Nội vụ"
+      },
+      "rank": {
+        "en": "Yondan",
+        "vi": "Tứ đẳng"
+      },
+      "bio": {
+        "en": "",
+        "vi": ""
+      }
+    },
+    {
+      "id": "i4",
+      "name": "Huy Le",
+      "role": {
+        "en": "Head of Foreign Affairs",
+        "vi": "Trưởng ban Ngoại vụ"
+      },
+      "rank": {
+        "en": "Sandan",
+        "vi": "Tam đẳng"
+      },
+      "bio": {
+        "en": "",
+        "vi": ""
+      }
     }
-  },
-  {
-    "id": "i2",
-    "name": "Darrick Le",
-    "role": {
-      "en": "Head Instructor",
-      "vi": "Trưởng Huấn luyện viên"
+  ],
+  "blackBelts": [
+    {
+      "rank": {
+        "en": "Sandan",
+        "vi": "Tam đẳng"
+      },
+      "members": [
+        {
+          "id": "i5",
+          "name": "Khanh Do"
+        },
+        {
+          "id": "i6",
+          "name": "Sy Dung Nguyen"
+        },
+        {
+          "id": "i7",
+          "name": "Tran Minh Ton"
+        },
+        {
+          "id": "i8",
+          "name": "Vuong Do"
+        }
+      ]
     },
-    "rank": {
-      "en": "Yondan",
-      "vi": "Tứ đẳng"
+    {
+      "rank": {
+        "en": "Nidan",
+        "vi": "Nhị đẳng"
+      },
+      "members": [
+        {
+          "id": "i9",
+          "name": "Anthony Do"
+        },
+        {
+          "id": "i10",
+          "name": "Christopher Hoang Pham"
+        },
+        {
+          "id": "i11",
+          "name": "Quang Pham"
+        }
+      ]
     },
-    "bio": {
-      "en": "",
-      "vi": ""
+    {
+      "rank": {
+        "en": "Shodan",
+        "vi": "Nhất đẳng"
+      },
+      "members": [
+        {
+          "id": "i12",
+          "name": "An Le"
+        },
+        {
+          "id": "i13",
+          "name": "Christopher Huy Vu Pham"
+        },
+        {
+          "id": "i14",
+          "name": "Chuong An Ta"
+        },
+        {
+          "id": "i15",
+          "name": "Daniel Nguyen"
+        },
+        {
+          "id": "i16",
+          "name": "Ethan Trần"
+        },
+        {
+          "id": "i17",
+          "name": "Han Le"
+        },
+        {
+          "id": "i18",
+          "name": "Long Dam"
+        },
+        {
+          "id": "i19",
+          "name": "Ngan Le"
+        },
+        {
+          "id": "i20",
+          "name": "Quan Le"
+        },
+        {
+          "id": "i21",
+          "name": "Quan Phan"
+        },
+        {
+          "id": "i22",
+          "name": "Richard P"
+        },
+        {
+          "id": "i23",
+          "name": "Tammy Phan"
+        },
+        {
+          "id": "i24",
+          "name": "Tuan-Anh Ho"
+        },
+        {
+          "id": "i25",
+          "name": "Viet Phan"
+        },
+        {
+          "id": "i26",
+          "name": "Vinh Stanley"
+        }
+      ]
     }
-  },
-  {
-    "id": "i3",
-    "name": "Thinh Vu",
-    "role": {
-      "en": "Head of Internal Affairs",
-      "vi": "Trưởng ban Nội vụ"
-    },
-    "rank": {
-      "en": "Yondan",
-      "vi": "Tứ đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i4",
-    "name": "Huy Le",
-    "role": {
-      "en": "Head of Foreign Affairs",
-      "vi": "Trưởng ban Ngoại vụ"
-    },
-    "rank": {
-      "en": "Sandan",
-      "vi": "Tam đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i5",
-    "name": "Sy Dung Nguyen",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Sandan",
-      "vi": "Tam đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i6",
-    "name": "Vuong Do",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Sandan",
-      "vi": "Tam đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i7",
-    "name": "Khanh Do",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Sandan",
-      "vi": "Tam đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i8",
-    "name": "Viet Phan",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i9",
-    "name": "Anthony Do",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Nidan",
-      "vi": "Nhị đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i10",
-    "name": "Vinh Stanley",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i11",
-    "name": "Daniel Nguyen",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i12",
-    "name": "Quan Phan",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i13",
-    "name": "Tammy Phan",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i14",
-    "name": "Ethan Trần",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i15",
-    "name": "Quang Pham",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Nidan",
-      "vi": "Nhị đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i16",
-    "name": "Quan Le",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i17",
-    "name": "Han Le",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i18",
-    "name": "Ngan Le",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i19",
-    "name": "An Le",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i20",
-    "name": "Christopher Hoang Pham",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Nidan",
-      "vi": "Nhị đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i21",
-    "name": "Christopher Huy Vu Pham",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i22",
-    "name": "Richard P",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i23",
-    "name": "Long Dam",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i24",
-    "name": "Chuong An Ta",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  },
-  {
-    "id": "i25",
-    "name": "Tuan-Anh Ho",
-    "photo": "/mock/instructors/TuanAnh_400x400.jpg",
-    "role": {
-      "en": "Assistant Instructor",
-      "vi": "Trợ tá Huấn luyện"
-    },
-    "rank": {
-      "en": "Shodan",
-      "vi": "Nhất đẳng"
-    },
-    "bio": {
-      "en": "With over twenty years of Aikido practice at Tenshinkai Vietnam, Tuan-Anh has returned to the art after a nearly ten-year break. It’s never too late to rekindle a passion and continue the journey.",
-      "vi": "Sau hơn hai mươi năm luyện tập Aikido tại Tenshinkai Việt Nam, Tuấn Anh đã quay trở lại với môn võ này sau gần mười năm gián đoạn. Đam mê không bao giờ là quá muộn để bắt đầu lại."
-    }
-  },
-  {
-    "id": "i26",
-    "name": "Tran Minh Ton",
-    "role": {
-      "en": "Black Belt",
-      "vi": "Đai đen"
-    },
-    "rank": {
-      "en": "Sandan",
-      "vi": "Tam đẳng"
-    },
-    "bio": {
-      "en": "",
-      "vi": ""
-    }
-  }
-]
+  ]
+}
