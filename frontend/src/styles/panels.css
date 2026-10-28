@@ -229,6 +229,11 @@
   overflow-wrap: anywhere;
 }
 
+.contact-details a:hover,
+.faq__question:hover {
+  color: var(--color-orange);
+}
+
 .map-frame {
   overflow: hidden;
   margin-bottom: var(--space-5);
@@ -249,7 +254,8 @@
 }
 
 .button--light:hover {
-  background: var(--color-grey-100);
+  background: var(--color-grey-200);
+  color: var(--color-orange);
 }
 
 /* Contact: text on the left and the map (about half its old width) on the
