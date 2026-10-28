@@ -198,7 +198,8 @@ function BlackBelts({ groups }) {
   const billboardRef = useRef(null);
   useTilt(billboardRef);
   const separatorRef = useRef(null);
-  const separatorInView = useInView(separatorRef, 0.6);
+  // Waits until the throw is past the middle of the screen, where eyes are.
+  const separatorInView = useInView(separatorRef, 0.6, 0.5);
   const groupsInView = useInView(billboardRef, 0.1);
 
   return (

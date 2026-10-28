@@ -10,12 +10,15 @@ describe('useInView', () => {
     vi.unstubAllGlobals();
   });
 
-  function setup(threshold) {
+  let options;
+
+  function setup(threshold, triggerLine) {
     vi.stubGlobal(
       'IntersectionObserver',
       class {
-        constructor(callback) {
+        constructor(callback, observerOptions) {
           trigger = (ratio) => act(() => callback([{ intersectionRatio: ratio }]));
+          options = observerOptions;
         }
         observe() {}
         disconnect() {}
@@ -24,7 +27,7 @@ describe('useInView', () => {
     let inView;
     function Probe() {
       const ref = useRef(null);
-      inView = useInView(ref, threshold);
+      inView = useInView(ref, threshold, triggerLine);
       return <div ref={ref} />;
     }
     render(<Probe />);
@@ -40,6 +43,14 @@ describe('useInView', () => {
 
     trigger(0.1);
     expect(isInView()).toBe(false);
+  });
+
+  it('counts the whole viewport by default, or only above the trigger line', () => {
+    setup(0.25);
+    expect(options.rootMargin).toBe('0px 0px 0% 0px');
+
+    setup(0.25, 0.5);
+    expect(options.rootMargin).toBe('0px 0px -50% 0px');
   });
 
   it('stays in view when IntersectionObserver is unavailable', () => {
