@@ -23,6 +23,7 @@ describe('content API (mock)', () => {
       await api.getSchedule(),
       (await api.getFees()).items,
       await api.getInstructors(),
+      await api.getDojoPhotos(),
     ];
     for (const list of lists) {
       const ids = list.map((item) => item.id);

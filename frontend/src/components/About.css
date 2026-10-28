@@ -23,7 +23,7 @@
 
 @media (min-width: 48rem) {
   .about__text {
-    font-size: 1.25rem;               /* 20px from tablet width up */
+    font-size: var(--text-xl);               /* 20px from tablet width up */
   }
 }
 

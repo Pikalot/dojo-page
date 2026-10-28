@@ -1,0 +1,218 @@
+/* Dojo photo carousel, inline and in the fullscreen viewer. Both share the
+   .carousel__* parts; slides are a native scroll-snap track, so swiping on
+   phones and trackpads works without any script. */
+
+/* Keeps the original dojo photo's proportions (1600 x 1060) for every slide;
+   other photos are cropped to fit. */
+.about__photo-frame.carousel {
+  position: relative;
+  aspect-ratio: 1600 / 1060;
+}
+
+.carousel__track {
+  display: flex;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;   /* a swipe past the end does not go "back" */
+  scrollbar-width: none;
+}
+
+.carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel__slide {
+  flex: 0 0 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;         /* one photo per swipe */
+}
+
+.carousel__open {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.about__photo.carousel__img {
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Previous / next buttons on the left and right edges, vertically centered. */
+.carousel__arrow {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.45);
+  color: var(--color-white);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background 200ms ease, opacity 400ms ease;
+}
+
+.carousel__arrow:hover {
+  background: rgb(0 0 0 / 0.7);
+}
+
+.carousel__arrow svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.carousel__arrow--prev {
+  left: var(--space-3);
+}
+
+.carousel__arrow--next {
+  right: var(--space-3);
+}
+
+/* "2 / 5" in the bottom corner, so phone users can tell there are more photos. */
+.carousel__count {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  margin: 0;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: rgb(0 0 0 / 0.55);
+  color: var(--color-white);
+  font-size: var(--text-sm);
+  pointer-events: none;
+  transition: opacity 400ms ease;
+}
+
+/* Inline: arrow | photo | arrow. The arrows sit outside the frame, whose
+   overflow: hidden would clip them. They use .scroll-button (Instructors.css). */
+.dojo-gallery {
+  display: grid;
+  /* Middle column is only as wide as the photo (its 50rem max); the outer
+     columns share the leftover space, and the arrows hug the photo. */
+  grid-template-columns: 1fr minmax(0, 50rem) 1fr;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: 2rem;
+}
+
+.dojo-gallery .about__photo-frame {
+  margin-top: 0;
+}
+
+.dojo-gallery__arrow {
+  transition: opacity 400ms ease;
+}
+
+.dojo-gallery__arrow:first-child {
+  justify-self: end;                /* left arrow: right-aligned, next to the photo */
+}
+
+.dojo-gallery__arrow:last-child {
+  justify-self: start;              /* right arrow: left-aligned, next to the photo */
+}
+
+/* Phones swipe instead; the photo then takes the full width. */
+@media (hover: none) {
+  .dojo-gallery {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dojo-gallery__arrow {
+    display: none;
+  }
+}
+
+/* Inline: controls appear with the photo's entrance effect, not before it. */
+.dojo-gallery[data-visible='false'] :is(.dojo-gallery__arrow, .carousel__count) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Fullscreen viewer (<dialog> opened with showModal()). */
+.photo-viewer {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgb(0 0 0 / 0.95);
+  color: var(--color-white);
+  overflow: hidden;
+}
+
+.photo-viewer::backdrop {
+  background: #000;
+}
+
+.photo-viewer[open] {
+  animation: photo-viewer-fade 250ms ease;
+}
+
+@keyframes photo-viewer-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Keep the page behind still while the viewer is open. */
+body:has(.photo-viewer[open]) {
+  overflow: hidden;
+}
+
+.photo-viewer__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;              /* whole photo, never cropped */
+}
+
+.photo-viewer__close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.45);
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.photo-viewer__close:hover {
+  background: rgb(255 255 255 / 0.15);
+}
+
+.photo-viewer__close svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.photo-viewer .carousel__count {
+  right: 50%;
+  transform: translateX(50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-viewer[open] {
+    animation: none;
+  }
+}

@@ -190,6 +190,7 @@
 .instructor-modal {
   width: min(34rem, 100% - 2 * var(--gutter));
   max-height: min(88vh, 48rem);
+  /* aspect-ratio: 5 / 7; */
   padding: 0;
   border: 0;
   border-radius: var(--radius-lg);

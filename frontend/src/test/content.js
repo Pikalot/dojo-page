@@ -51,6 +51,11 @@ export function makeContent() {
       rank: translated(`Rank ${n}`),
       bio: paragraphs(`Bio ${n}`, 1),
     })),
+    getDojoPhotos: list(3, (n) => ({
+      id: `photo-${n}`,
+      src: `/photo-${n}.jpg`,
+      alt: translated(`Photo ${n}`),
+    })),
   };
 }
 

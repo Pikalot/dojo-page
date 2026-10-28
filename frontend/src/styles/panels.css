@@ -218,3 +218,8 @@
 .contact-layout__text > :first-child {
   margin-top: 0;
 }
+
+/* Space between the intro paragraphs (one per blank line in the text). */
+.contact-layout__text > p + p {
+  margin-top: var(--space-4);
+}

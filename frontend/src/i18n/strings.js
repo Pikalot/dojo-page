@@ -52,7 +52,10 @@ export const strings = {
       fees: 'Fees',
     },
     about: {
-      photoAlt: 'Tenshinkai Aikido members in hakama holding their rank certificates in the dojo',
+      photos: 'Dojo photos',
+      previousPhoto: 'Previous photo',
+      nextPhoto: 'Next photo',
+      closePhoto: 'Close photo viewer',
     },
     schedule: {
       day: 'Day',
@@ -85,7 +88,7 @@ export const strings = {
     },
     footer: {
       rights: 'All rights reserved.',
-      placeholderNotice: 'Placeholder content: details on this page are not final.',
+      placeholderNotice: '',
     },
   },
 
@@ -131,7 +134,10 @@ export const strings = {
       fees: 'Học phí',
     },
     about: {
-      photoAlt: 'Các môn sinh Tenshinkai Aikido mặc hakama, cầm giấy chứng nhận đẳng cấp tại võ đường',
+      photos: 'Ảnh võ đường',
+      previousPhoto: 'Ảnh trước',
+      nextPhoto: 'Ảnh tiếp theo',
+      closePhoto: 'Đóng trình xem ảnh',
     },
     schedule: {
       day: 'Ngày',

@@ -51,7 +51,7 @@
 .hero__tagline {
   max-width: 40ch;
   margin-top: var(--space-4);
-  font-size: var(--text-lg);
+  font-size: var(--text-xl);
   color: rgb(255 255 255 / 0.92);
 }
 
