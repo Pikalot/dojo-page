@@ -10,7 +10,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "images": "sh scripts/optimize-images.sh"
+    "images": "sh scripts/optimize-images.sh",
+    "prepare": "git config core.hooksPath .githooks"
   },
   "dependencies": {
     "react": "^19.3.1",
