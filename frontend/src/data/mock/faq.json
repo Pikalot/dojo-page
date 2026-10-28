@@ -1,0 +1,57 @@
+[
+  {
+    "id": "q1",
+    "question": {
+      "en": "How old do I have to be?",
+      "vi": "Bao nhiêu tuổi thì có thể tập?"
+    },
+    "answer": {
+      "en": "We welcome students from age 7 to 70. Age doesn't have to hold you back from getting started.",
+      "vi": "Chúng tôi chào đón môn sinh từ 7 đến 70 tuổi. Tuổi tác không phải là trở ngại để bắt đầu."
+    }
+  },
+  {
+    "id": "q2",
+    "question": {
+      "en": "Do I need a uniform for class?",
+      "vi": "Tôi có cần võ phục không?"
+    },
+    "answer": {
+      "en": "All aikidōka must wear a white keikogi (practice uniform) during class. Students may bring their own uniform or ask the dojo about available options. Uniform costs, if applicable, are not included in class fees.",
+      "vi": "Tất cả môn sinh Aikido phải mặc keikogi (võ phục trắng) trong giờ học. Môn sinh có thể tự chuẩn bị võ phục hoặc liên hệ võ đường để tìm hiểu về các lựa chọn hiện có. Chi phí võ phục, nếu có, không bao gồm trong học phí."
+    }
+  },
+  {
+    "id": "q3",
+    "question": {
+      "en": "Is Aikido safe?",
+      "vi": "Aikido có an toàn không?"
+    },
+    "answer": {
+      "en": "Yes. Aikido is non-competitive, and every class starts with learning how to fall safely (ukemi). Partners work together and adjust to each other's level.",
+      "vi": "Có. Aikido không mang tính thi đấu, và mỗi buổi tập đều bắt đầu bằng việc học cách ngã an toàn (ukemi). Các bạn tập hỗ trợ nhau và điều chỉnh theo trình độ của nhau."
+    }
+  },
+  {
+    "id": "q4",
+    "question": {
+      "en": "Can I watch a class before joining?",
+      "vi": "Tôi có thể xem một buổi tập trước khi đăng ký không?"
+    },
+    "answer": {
+      "en": "Of course. Visitors are welcome to watch any class on the schedule. Please arrive a few minutes early and introduce yourself.",
+      "vi": "Tất nhiên. Khách luôn được chào đón đến xem bất kỳ buổi tập nào trong lịch. Xin vui lòng đến sớm vài phút và giới thiệu bản thân."
+    }
+  },
+  {
+    "id": "q5",
+    "question": {
+      "en": "How much does membership cost?",
+      "vi": "Học phí là bao nhiêu?"
+    },
+    "answer": {
+      "en": "Please contact us for current membership options.",
+      "vi": "Xin vui lòng liên hệ với chúng tôi để biết các gói học phí hiện tại."
+    }
+  }
+]

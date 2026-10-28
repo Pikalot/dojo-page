@@ -12,8 +12,8 @@ function renderSearch(options) {
       <section id="schedule">
         <h2 tabIndex={-1}>Schedule</h2>
       </section>
-      <section id="fees">
-        <h2 tabIndex={-1}>Fees</h2>
+      <section id="faq">
+        <h2 tabIndex={-1}>FAQ</h2>
       </section>
     </>,
     options,
@@ -37,17 +37,17 @@ describe('SectionSearch', () => {
     const user = userEvent.setup();
     const { input, onNavigate } = renderSearch();
 
-    await user.type(input, 'pri'); // "price" keyword -> Fees
+    await user.type(input, 'pri'); // "price" keyword -> FAQ
     await user.keyboard('{ArrowDown}');
-    const option = screen.getByRole('option', { name: 'Fees' });
+    const option = screen.getByRole('option', { name: 'FAQ' });
     expect(option).toHaveAttribute('aria-selected', 'true');
     expect(input).toHaveAttribute('aria-activedescendant', option.id);
 
     await user.keyboard('{Enter}');
 
-    expect(document.getElementById('fees').scrollIntoView).toHaveBeenCalled();
-    expect(screen.getByRole('heading', { name: 'Fees' })).toHaveFocus();
-    expect(window.location.hash).toBe('#fees');
+    expect(document.getElementById('faq').scrollIntoView).toHaveBeenCalled();
+    expect(screen.getByRole('heading', { name: 'FAQ' })).toHaveFocus();
+    expect(window.location.hash).toBe('#faq');
     expect(onNavigate).toHaveBeenCalledTimes(1);
     expect(input).toHaveValue('');
   });
@@ -65,10 +65,10 @@ describe('SectionSearch', () => {
     const user = userEvent.setup();
     const { input } = renderSearch();
 
-    await user.type(input, 'fee');
-    await user.click(screen.getByRole('option', { name: 'Fees' }));
+    await user.type(input, 'faq');
+    await user.click(screen.getByRole('option', { name: 'FAQ' }));
 
-    expect(screen.getByRole('heading', { name: 'Fees' })).toHaveFocus();
+    expect(screen.getByRole('heading', { name: 'FAQ' })).toHaveFocus();
   });
 
   it('closes on Escape, then clears on a second Escape', async () => {
@@ -98,8 +98,8 @@ describe('SectionSearch', () => {
     const user = userEvent.setup();
     const { input } = renderSearch({ language: 'vi' });
 
-    await user.type(input, 'hoc phi');
+    await user.type(input, 'hoi dap');
 
-    expect(screen.getByRole('option', { name: 'Học phí' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Hỏi đáp' })).toBeInTheDocument();
   });
 });

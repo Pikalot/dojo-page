@@ -1,29 +1,20 @@
 [
   {
     "id": "a1",
-    "date": "2026-11-01",
-    "title": { "en": "Lorem ipsum dolor sit", "vi": "Lorem ipsum dolor sit" },
+    "date": "2026-10-27",
+    "title": { "en": "Rank Test", "vi": "Thi lên đai" },
     "body": {
-      "en": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-      "vi": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+      "en": "The dojo will hold a Kyu-shinsa (rank examination) for orange belt students during the week of October 26th - 30th.",
+      "vi": "Võ đường sẽ tổ chức kỳ thi lên cấp Kyu-shinsa dành cho các môn sinh đai cam trong tuần từ ngày 26 đến 30 tháng 10."
     }
   },
   {
     "id": "a2",
-    "date": "2026-11-15",
-    "title": { "en": "Consectetur adipiscing", "vi": "Consectetur adipiscing" },
+    "date": "2026-10-27",
+    "title": { "en": "Rank Test - Dan-shinsa", "vi": "Thi lên đẳng" },
     "body": {
-      "en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      "vi": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-    }
-  },
-  {
-    "id": "a3",
-    "date": "2026-12-06",
-    "title": { "en": "Sed do eiusmod tempor", "vi": "Sed do eiusmod tempor" },
-    "body": {
-      "en": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
-      "vi": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+      "en": "Tenshinkai Westminston Dojo will hold a Dan-shinsa (black belt examination) from December 11th to 13th.",
+      "vi": "Võ đường Tenshinkai Westminster sẽ tổ chức kỳ thi Dan-shinsa (thi lên đẳng) từ ngày 11 đến ngày 13 tháng 12."
     }
   }
 ]

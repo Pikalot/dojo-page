@@ -1,4 +1,4 @@
-/* Two side-by-side panels on wider screens (Info | Schedule, Contact | Fees),
+/* Two side-by-side panels on wider screens (News | Schedule, Contact | FAQ),
    stacked on phones. The thin gap shows the page background, as in the wireframe. */
 .split {
   display: grid;
@@ -57,7 +57,7 @@
 
 /* Keep panel content from stretching too wide on very large screens. */
 .panel > * {
-  max-width: 36rem;
+  max-width: 100%;
   margin-inline: auto;
 }
 
@@ -98,7 +98,7 @@
   font-size: var(--text-lg);
 }
 
-/* Tables (schedule, fees) */
+/* Tables (schedule) */
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -141,6 +141,62 @@
 .data-table__muted {
   font-size: var(--text-sm);
   color: #eef2f9; /* on blue: 4.8:1 */
+}
+
+/* FAQ: native <details> disclosures, one per question. */
+.faq {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.faq > li + li {
+  border-top: 1px solid rgb(255 255 255 / 0.25);
+}
+
+.faq__question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-4);
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+  list-style: none;                 /* hide the default triangle */
+}
+
+.faq__question::-webkit-details-marker {
+  display: none;
+}
+
+/* Chevron that points down when closed and up when open. */
+.faq__question::after {
+  content: '';
+  flex: none;
+  width: 0.6em;
+  height: 0.6em;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-25%) rotate(45deg);
+  transition: transform 200ms ease;
+}
+
+.faq__item[open] > .faq__question::after {
+  transform: translateY(25%) rotate(-135deg);
+}
+
+.faq__answer {
+  padding-bottom: var(--space-4);
+}
+
+.faq__answer + .faq__answer {
+  margin-top: calc(-1 * var(--space-2));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq__question::after {
+    transition: none;
+  }
 }
 
 /* Contact */
@@ -198,7 +254,7 @@
 
 /* Contact: text on the left and the map (about half its old width) on the
    right once the panel is wide enough; stacked on narrow panels. Based on the
-   panel's own width, since it sits beside Fees on wider screens. */
+   panel's own width, since it sits beside the FAQ on wider screens. */
 #contact {
   container-type: inline-size;
 }

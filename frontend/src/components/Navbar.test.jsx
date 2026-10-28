@@ -23,7 +23,7 @@ describe('Navbar', () => {
   it('links to every section', () => {
     const { nav } = renderNavbar();
     const labels = within(nav).getAllByRole('link').map((a) => a.textContent);
-    expect(labels).toEqual(['About', 'Announcements', 'Schedule', 'Instructors', 'Contact', 'Fees']);
+    expect(labels).toEqual(['About', 'Announcements', 'Schedule', 'Instructors', 'Contact', 'FAQ']);
   });
 
   it('toggles the menu and reflects state in aria-expanded', async () => {

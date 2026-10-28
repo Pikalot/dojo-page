@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { About } from './components/About.jsx';
 import { Announcements } from './components/Announcements.jsx';
 import { Contact } from './components/Contact.jsx';
-import { Fees } from './components/Fees.jsx';
+import { Faq } from './components/Faq.jsx';
 import { Footer } from './components/Footer.jsx';
 import { Hero } from './components/Hero.jsx';
 import { Instructors } from './components/Instructors.jsx';
@@ -33,7 +33,7 @@ export function App() {
         <Instructors />
         <div className="split">
           <Contact />
-          <Fees />
+          <Faq />
         </div>
       </main>
       <Footer />

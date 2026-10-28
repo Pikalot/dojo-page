@@ -58,12 +58,14 @@ export function Contact() {
                   <a href={`mailto:${contact.data.email}`}>{contact.data.email}</a>
                 </dd>
               </div>
-              <div>
-                <dt>{t.contact.facebook}</dt>
-                <dd>
-                  <a href={`${contact.data.facebook}`}>{contact.data.facebook}</a>
-                </dd>
-              </div>
+              {contact.data.facebook && (
+                <div>
+                  <dt>{t.contact.facebook}</dt>
+                  <dd>
+                    <a href={contact.data.facebook}>{contact.data.facebook}</a>
+                  </dd>
+                </div>
+              )}
             </dl>
           </div>
         )}

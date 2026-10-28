@@ -127,9 +127,22 @@
   margin-inline: auto;
 }
 
-.instructor-card__photo svg {
-  width: 55%;
-  height: 55%;
+/* A real photo fills the circle; the logo fallback sits inside it. */
+.instructor-card__photo {
+  overflow: hidden;
+}
+
+.instructor-card__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.instructor-card__photo[data-fallback='true'] img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
 }
 
 .instructor-card__name {

@@ -27,11 +27,11 @@ describe('search', () => {
   it('matches Vietnamese labels with or without accents', () => {
     expect(ids(search(index, 'lịch tập'))[0]).toBe('schedule');
     expect(ids(search(index, 'lich tap'))[0]).toBe('schedule');
-    expect(ids(search(index, 'hoc phi'))[0]).toBe('fees');
+    expect(ids(search(index, 'hoi dap'))[0]).toBe('faq');
   });
 
   it('matches keywords, not just labels', () => {
-    expect(ids(search(index, 'price'))).toEqual(['fees']);
+    expect(ids(search(index, 'price'))).toEqual(['faq']);
     expect(ids(search(index, 'sensei'))).toEqual(['instructors']);
   });
 

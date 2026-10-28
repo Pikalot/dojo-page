@@ -1,14 +1,14 @@
 [
   {
     "id": "i1",
-    "name": "Dojo Head",
+    "name": "Dac Le",
     "role": {
-      "en": "Dojo Head",
-      "vi": "Trưởng võ đường"
+      "en": "Dojo-cho",
+      "vi": "Đạo Trường Trưởng"
     },
     "rank": {
-      "en": "Xth Dan",
-      "vi": "X đẳng"
+      "en": "Rokudan",
+      "vi": "Lục đẳng"
     },
     "bio": {
       "en": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
@@ -17,30 +17,30 @@
   },
   {
     "id": "i2",
-    "name": "Instructor A",
+    "name": "Dung Le",
     "role": {
       "en": "Instructor",
       "vi": "Huấn luyện viên"
     },
     "rank": {
-      "en": "Xth Dan",
-      "vi": "X đẳng"
+      "en": "Yondan",
+      "vi": "Tứ đẳng"
     },
     "bio": {
-      "en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. llasdf  asdf asfd      asdfasdf          adfsadfs alll. lkjsf asdf kj;jsd;akfjs;d asjdf;asdjf;k. a kaj;sjdf;dsajf as;lj;ljasd;fk. a;kj;akjdf. adljf;ajdf;ksd lkj;salkjf;lkdsa a ;lj;lkjafdsa ;kj;klj;kfja a;jkd;slajf;ls a;lkj;lsdakjfl;askdj a;ljkds;lajfk;ldsaj a;lkj;lksajf;ldksaj a;lj;lfkjads;fjsd;lk a;kjs;dkfjsa;kfj asa;js;flkjsda;fkdjf a;sjkdf;akjfa;sk a;lkjdf;lakjfkl as;ldjkf;alsdkjf ;lkas;dfjl;aksdjf ;klsaa;lkj;dlaksfj sa;ldkjf ;alsdkjfa a;lkjsdf;ladskjf ;laskjfd;dlajk ;lkajsfl;ksdajf a;lsdjkf;l asjdf;laksjdf;lksa jdf;alsjkf;l askdjfa;;lj a;sldjf ;sladjfk ;a;lsdkj f;lasjdf ",
-      "vi": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      "en": "",
+      "vi": ""
     }
   },
   {
     "id": "i3",
-    "name": "Instructor B",
+    "name": "Sensei Thinh",
     "role": {
       "en": "Instructor",
       "vi": "Huấn luyện viên"
     },
     "rank": {
-      "en": "Xth Dan",
-      "vi": "X đẳng"
+      "en": "Yondan",
+      "vi": "Tứ đẳng"
     },
     "bio": {
       "en": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
@@ -49,14 +49,14 @@
   },
   {
     "id": "i4",
-    "name": "Instructor C",
+    "name": "Huy Le",
     "role": {
       "en": "Instructor",
       "vi": "Huấn luyện viên"
     },
     "rank": {
-      "en": "Xth Dan",
-      "vi": "X đẳng"
+      "en": "Sandan",
+      "vi": "Tam đẳng"
     },
     "bio": {
       "en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
@@ -65,14 +65,14 @@
   },
   {
     "id": "i5",
-    "name": "Instructor D",
+    "name": "Sensei Khanh",
     "role": {
       "en": "Instructor",
       "vi": "Huấn luyện viên"
     },
     "rank": {
-      "en": "Xth Dan",
-      "vi": "X đẳng"
+      "en": "Sandan",
+      "vi": "Tam đẳng"
     },
     "bio": {
       "en": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
@@ -81,18 +81,35 @@
   },
   {
     "id": "i6",
-    "name": "Instructor E",
+    "name": "Sensei Dung",
     "role": {
-      "en": "Assistant instructor",
-      "vi": "Trợ giảng"
+      "en": "Instructor",
+      "vi": "Huấn luyện viên"
     },
     "rank": {
-      "en": "Xth Dan",
-      "vi": "X đẳng"
+      "en": "Sandan",
+      "vi": "Tam đẳng"
     },
     "bio": {
       "en": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
       "vi": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    }
+  },
+  {
+    "id": "i7",
+    "name": "Tuan-Anh Ho",
+    "photo": "/mock/instructors/TuanAnh_400x400.jpg",
+    "role": {
+      "en": "Assistant Instructor",
+      "vi": "Trợ tá Huấn luyện"
+    },
+    "rank": {
+      "en": "Shodan",
+      "vi": "Nhất đẳng"
+    },
+    "bio": {
+      "en": "With over twenty years of Aikido practice at Tenshinkai Vietnam, Tuan-Anh has returned to the art after a nearly ten-year break. It’s never too late to rekindle a passion and continue the journey.",
+      "vi": "Sau hơn hai mươi năm luyện tập Aikido tại Tenshinkai Việt Nam, Tuấn Anh đã quay trở lại với môn võ này sau gần mười năm gián đoạn. Đam mê không bao giờ là quá muộn để bắt đầu lại."
     }
   }
 ]

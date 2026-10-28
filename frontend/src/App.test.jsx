@@ -64,8 +64,8 @@ describe('App', () => {
 
     expect(await section('schedule').findByRole('alert')).toHaveTextContent(t.content.error);
     expect(section('schedule').queryByRole('table')).not.toBeInTheDocument();
-    expect(section('fees').queryByText(t.content.loading)).not.toBeInTheDocument();
-    expect(section('fees').queryByRole('alert')).not.toBeInTheDocument();
+    expect(section('faq').queryByText(t.content.loading)).not.toBeInTheDocument();
+    expect(section('faq').queryByRole('alert')).not.toBeInTheDocument();
   });
 
   it('has a skip link that targets the main landmark', () => {

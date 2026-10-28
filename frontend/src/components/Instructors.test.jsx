@@ -50,4 +50,13 @@ describe('Instructors', () => {
 
     expect(screen.queryByRole('dialog', { name: person.name })).not.toBeInTheDocument();
   });
+
+  it("shows an instructor's photo, or the dojo logo when there is none", async () => {
+    renderWithLanguage(<Instructors />);
+    const [withPhoto, withoutPhoto] = content.getInstructors;
+
+    const photo = await screen.findByRole('img', { name: t.instructors.photoAlt(withPhoto.name) });
+    expect(photo).toHaveAttribute('src', withPhoto.photo);
+    expect(screen.queryByRole('img', { name: t.instructors.photoAlt(withoutPhoto.name) })).not.toBeInTheDocument();
+  });
 });

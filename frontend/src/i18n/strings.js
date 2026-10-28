@@ -1,5 +1,5 @@
 // UI text for every supported language. Content that staff will edit later
-// (announcements, schedule, fees, instructors) lives in src/data instead.
+// (announcements, schedule, FAQ, instructors) lives in src/data instead.
 // Vietnamese strings are a first draft and should be reviewed by a native speaker.
 
 export const LANGUAGES = [
@@ -22,7 +22,7 @@ export const strings = {
       schedule: 'Schedule',
       instructors: 'Instructors',
       contact: 'Contact',
-      fees: 'Fees',
+      faq: 'FAQ',
       openMenu: 'Open menu',
       closeMenu: 'Close menu',
       skipToContent: 'Skip to main content',
@@ -45,11 +45,11 @@ export const strings = {
       subcontent: '',
       whereWeTrain: 'Where we train',
       seeMap: 'See map and directions',
-      announcements: 'Info & Announcements',
+      announcements: 'News & Events',
       schedule: 'Schedule',
       instructors: 'Instructors',
       contact: 'Contact Us',
-      fees: 'Fees',
+      faq: 'Frequently Asked Questions',
     },
     about: {
       photos: 'Dojo photos',
@@ -62,15 +62,11 @@ export const strings = {
       time: 'Time',
       class: 'Class',
     },
-    fees: {
-      plan: 'Plan',
-      price: 'Price',
-    },
     instructors: {
       previous: 'Scroll to previous instructors',
       next: 'Scroll to next instructors',
       listLabel: 'Instructor profiles',
-      photoPlaceholder: (name) => `Placeholder photo for ${name}`,
+      photoAlt: (name) => `Photo of ${name}`,
       close: 'Close',
     },
     contact: {
@@ -100,11 +96,11 @@ export const strings = {
       label: 'Chính',
       home: 'Trang chủ Aikido Tenshinkai',
       about: 'Giới thiệu',
-      announcements: 'Thông báo',
+      announcements: 'Tin tức & Sự kiện',
       schedule: 'Lịch tập',
       instructors: 'Huấn luyện viên',
       contact: 'Liên hệ',
-      fees: 'Học phí',
+      faq: 'Hỏi đáp',
       openMenu: 'Mở menu',
       closeMenu: 'Đóng menu',
       skipToContent: 'Chuyển đến nội dung chính',
@@ -131,7 +127,7 @@ export const strings = {
       schedule: 'Lịch tập',
       instructors: 'Huấn luyện viên',
       contact: 'Liên hệ',
-      fees: 'Học phí',
+      faq: 'Câu hỏi thường gặp',
     },
     about: {
       photos: 'Ảnh võ đường',
@@ -144,15 +140,11 @@ export const strings = {
       time: 'Giờ',
       class: 'Lớp',
     },
-    fees: {
-      plan: 'Gói',
-      price: 'Giá',
-    },
     instructors: {
       previous: 'Cuộn đến huấn luyện viên trước',
       next: 'Cuộn đến huấn luyện viên tiếp theo',
       listLabel: 'Hồ sơ huấn luyện viên',
-      photoPlaceholder: (name) => `Ảnh tạm thời của ${name}`,
+      photoAlt: (name) => `Ảnh của ${name}`,
       close: 'Đóng',
     },
     contact: {

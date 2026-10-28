@@ -21,7 +21,7 @@ describe('content API (mock)', () => {
     const lists = [
       await api.getAnnouncements(),
       await api.getSchedule(),
-      (await api.getFees()).items,
+      await api.getFaq(),
       await api.getInstructors(),
       await api.getDojoPhotos(),
     ];

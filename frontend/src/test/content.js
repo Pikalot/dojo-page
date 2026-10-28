@@ -21,6 +21,7 @@ export function makeContent() {
       intro: paragraphs('Contact intro', 1),
       phone: '(000) 000-0000',
       email: 'contact@example.test',
+      facebook: 'https://example.test/dojo',
     },
     getAnnouncements: list(3, (n) => ({
       id: `announcement-${n}`,
@@ -35,18 +36,17 @@ export function makeContent() {
       end: `${pad(10 + n)}:30`,
       className: translated(`Class ${n}`),
     })),
-    getFees: {
-      items: list(2, (n) => ({
-        id: `fee-${n}`,
-        plan: translated(`Plan ${n}`),
-        price: `$${n}`,
-        period: translated(`Period ${n}`),
-      })),
-      note: translated('Fees note'),
-    },
+    getSubcontent: { body: paragraphs('Subcontent paragraph', 1) },
+    getFaq: list(3, (n) => ({
+      id: `faq-${n}`,
+      question: translated(`Question ${n}`),
+      answer: paragraphs(`Answer ${n}`, 1),
+    })),
     getInstructors: list(3, (n) => ({
       id: `instructor-${n}`,
       name: `Instructor ${n}`,
+      // Optional: only the first instructor has a photo.
+      ...(n === 1 && { photo: `/instructor-${n}.jpg` }),
       role: translated(`Role ${n}`),
       rank: translated(`Rank ${n}`),
       bio: paragraphs(`Bio ${n}`, 1),

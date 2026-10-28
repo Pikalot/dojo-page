@@ -6,6 +6,7 @@ import { toParagraphs } from '../lib/text.js';
 import { ContentStatus } from './ContentStatus.jsx';
 import './Instructors.css';
 import { useTilt } from '../hooks/useTilt.js';
+import tenshinkaiLogo from '../assets/tenshinkai-logo.svg';
 
 /**
  * Horizontally scrolling row of instructor cards. Works with touch swipe,
@@ -115,7 +116,7 @@ export function Instructors() {
         <ul className="instructors__list billboard" ref={billboardRef}>
           {instructors?.map((person) => (
             <li key={person.id} className="instructor-card">
-              <PhotoPlaceholder label={t.instructors.photoPlaceholder(person.name)} />
+              <InstructorPhoto photo={person.photo} alt={t.instructors.photoAlt(person.name)} />
               <h3 className="instructor-card__name">
                 {/* Its click area stretches over the whole card (see Instructors.css). */}
                 <button
@@ -161,7 +162,7 @@ export function Instructors() {
                 <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
               </svg>
             </button>
-            <PhotoPlaceholder label={t.instructors.photoPlaceholder(profile.name)} />
+            <InstructorPhoto photo={profile.photo} alt={t.instructors.photoAlt(profile.name)} />
             <h2 id="instructor-modal-name" className="instructor-modal__name">
               {profile.name}
             </h2>
@@ -180,14 +181,22 @@ export function Instructors() {
   );
 }
 
-function PhotoPlaceholder({ label }) {
+/**
+ * The instructor's photo, or the dojo logo when they have none: `photo` is
+ * optional, and an empty string or a URL that fails to load counts as none.
+ */
+function InstructorPhoto({ photo, alt }) {
+  const [failed, setFailed] = useState(null);
+  const hasPhoto = Boolean(photo) && failed !== photo;
+
   return (
-    <div className="instructor-card__photo">
-      {/* PLACEHOLDER: generic silhouette until real photos are supplied. */}
-      <svg viewBox="0 0 80 80" role="img" aria-label={label}>
-        <circle cx="40" cy="30" r="14" fill="currentColor" />
-        <path d="M14 72c2-16 13-24 26-24s24 8 26 24z" fill="currentColor" />
-      </svg>
+    <div className="instructor-card__photo" data-fallback={!hasPhoto}>
+      {hasPhoto ? (
+        <img src={photo} alt={alt} loading="lazy" onError={() => setFailed(photo)} />
+      ) : (
+        // Decorative: the name is right below it.
+        <img src={tenshinkaiLogo} alt="" />
+      )}
     </div>
   );
 }
