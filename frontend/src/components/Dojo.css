@@ -124,13 +124,15 @@
   justify-self: start;              /* right arrow: left-aligned, next to the photo */
 }
 
-/* Phones swipe instead; the photo then takes the full width. */
-@media (hover: none) {
+/* Touch screens and narrow screens swipe instead; the photo then takes the
+   full width. 48rem matches where the Instructors arrows appear. */
+@media (hover: none), (max-width: 47.99rem) {
   .dojo-gallery {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .dojo-gallery__arrow {
+  /* Two classes, so it outranks .scroll-button's display: grid, which loads later. */
+  .dojo-gallery .dojo-gallery__arrow {
     display: none;
   }
 }
