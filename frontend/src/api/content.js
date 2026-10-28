@@ -12,7 +12,7 @@ import subcontent from '../data/mock/subcontent.json';
 import announcements from '../data/mock/announcements.json';
 import contact from '../data/mock/contact.json';
 import faq from '../data/mock/faq.json';
-import dojoPhotos from '../data/mock/dojoPhotos.js';
+import dojoPhotos from '../data/mock/dojoPhotos.json';
 import instructors from '../data/mock/instructors.json';
 import location from '../data/mock/location.json';
 import schedule from '../data/mock/schedule.json';
