@@ -6,6 +6,11 @@ describe('formatTime', () => {
     expect(formatTime('19:00', 'en').replace(/\s/g, ' ')).toBe('7:00 PM');
     expect(formatTime('19:00', 'vi')).toBe('19:00');
   });
+
+  it('returns nothing for a missing or malformed time', () => {
+    expect(formatTime(null, 'en')).toBe('');
+    expect(formatTime('later', 'en')).toBe('');
+  });
 });
 
 describe('formatDate', () => {
@@ -16,5 +21,10 @@ describe('formatDate', () => {
   it('formats dates in Vietnamese', () => {
     expect(formatDate('2026-11-01', 'vi')).toMatch(/2026/);
     expect(formatDate('2026-11-01', 'vi')).toMatch(/11/);
+  });
+
+  it('returns nothing for a missing or malformed date', () => {
+    expect(formatDate(null, 'en')).toBe('');
+    expect(formatDate('soon', 'en')).toBe('');
   });
 });

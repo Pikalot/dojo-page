@@ -18,7 +18,7 @@ export const strings = {
       label: 'Main',
       home: 'Tenshinkai Aikido home',
       about: 'About',
-      announcements: 'Announcements',
+      announcements: 'News',
       schedule: 'Schedule',
       instructors: 'Instructors',
       contact: 'Contact',
@@ -91,7 +91,7 @@ export const strings = {
 
   vi: {
     meta: {
-      title: 'Võ đường Aikido Tenshinkai',
+      title: 'Võ đường Aikido Tenshinkai tại San Jose',
     },
     nav: {
       label: 'Chính',
@@ -164,7 +164,7 @@ export const strings = {
     },
     footer: {
       rights: 'Bảo lưu mọi quyền.',
-      placeholderNotice: 'Nội dung tạm thời: thông tin trên trang chưa chính thức.',
+      placeholderNotice: '',
     },
   },
 };

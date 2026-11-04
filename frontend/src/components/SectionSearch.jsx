@@ -51,6 +51,8 @@ export function SectionSearch({ onNavigate }) {
         if (results.length) select(results[activeIndex >= 0 ? activeIndex : 0]);
         break;
       case 'Escape':
+        // Browsers clear a search input on Escape; closing the list comes first.
+        event.preventDefault();
         if (showPopup) {
           setOpen(false);
           setActiveIndex(-1);

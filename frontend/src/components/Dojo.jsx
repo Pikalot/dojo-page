@@ -17,7 +17,8 @@ const PHOTO_EFFECT = 'wipe';
 export function Dojo() {
   const { t } = useLanguage();
   const about = useContent(getAbout);
-  const { data: photos } = useContent(getDojoPhotos);
+  const photoContent = useContent(getDojoPhotos);
+  const photos = photoContent.data;
   const count = photos?.length ?? 0;
   const photoRef = useRef(null);
   const photoInView = useInView(photoRef);
@@ -49,13 +50,13 @@ export function Dojo() {
   };
 
   return (
-    <section id="dojo" className="section about" aria-labelledby="about-title">
+    <section id="dojo" className="section about" aria-labelledby="dojo-title">
       <div className="container">
         <h2 id="dojo-title" className="section__title about__title" tabIndex={-1}>
           {t.sections.about}
         </h2>
 
-        <ContentStatus status={about.status} />
+        <ContentStatus status={about.status === 'ready' ? photoContent.status : about.status} />
         {about.data &&
           toParagraphs(about.data.body).map((text, i) => (
             <p key={i} className="about__text">

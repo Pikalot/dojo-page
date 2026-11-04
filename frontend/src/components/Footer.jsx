@@ -10,7 +10,7 @@ export function Footer() {
         <p>
           © {year} {t.hero.title}. {t.footer.rights}
         </p>
-        <p className="site-footer__notice">{t.footer.placeholderNotice}</p>
+        {t.footer.placeholderNotice && <p className="site-footer__notice">{t.footer.placeholderNotice}</p>}
       </div>
     </footer>
   );

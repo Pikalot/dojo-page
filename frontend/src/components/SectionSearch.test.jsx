@@ -75,10 +75,10 @@ describe('SectionSearch', () => {
     const user = userEvent.setup();
     const { input } = renderSearch();
 
-    await user.type(input, 'fee');
+    await user.type(input, 'faq');
     await user.keyboard('{Escape}');
     expect(input).toHaveAttribute('aria-expanded', 'false');
-    expect(input).toHaveValue('fee');
+    expect(input).toHaveValue('faq');
 
     await user.keyboard('{Escape}');
     expect(input).toHaveValue('');

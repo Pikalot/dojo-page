@@ -23,7 +23,7 @@ export function Contact() {
       <h2 id="contact-title" className="section__title panel__title" tabIndex={-1}>
         {t.sections.contact}
       </h2>
-      <ContentStatus status={contact.status} />
+      <ContentStatus status={contact.status === 'ready' ? location.status : contact.status} />
       {/* Text on the left, map on the right when the panel is wide enough;
           stacked otherwise (see .contact-layout in panels.css). */}
       <div className="contact-layout">
@@ -46,18 +46,22 @@ export function Contact() {
                   </dd>
                 </div>
               )}
-              <div>
-                <dt>{t.contact.phone}</dt>
-                <dd>
-                  <a href={`tel:${contact.data.phone.replace(/[^\d+]/g, '')}`}>{contact.data.phone}</a>
-                </dd>
-              </div>
-              <div>
-                <dt>{t.contact.email}</dt>
-                <dd>
-                  <a href={`mailto:${contact.data.email}`}>{contact.data.email}</a>
-                </dd>
-              </div>
+              {contact.data.phone && (
+                <div>
+                  <dt>{t.contact.phone}</dt>
+                  <dd>
+                    <a href={`tel:${contact.data.phone.replace(/[^\d+]/g, '')}`}>{contact.data.phone}</a>
+                  </dd>
+                </div>
+              )}
+              {contact.data.email && (
+                <div>
+                  <dt>{t.contact.email}</dt>
+                  <dd>
+                    <a href={`mailto:${contact.data.email}`}>{contact.data.email}</a>
+                  </dd>
+                </div>
+              )}
               {contact.data.facebook && (
                 <div>
                   <dt>{t.contact.facebook}</dt>

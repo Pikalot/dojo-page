@@ -68,6 +68,42 @@ describe('App', () => {
     expect(section('faq').queryByRole('alert')).not.toBeInTheDocument();
   });
 
+  it('shows an error when only part of a section fails to load', async () => {
+    api.getLocation.mockRejectedValue(new Error('offline'));
+    api.getDojoPhotos.mockRejectedValue(new Error('offline'));
+    renderWithLanguage(<App />);
+
+    expect(await section('contact').findByRole('alert')).toHaveTextContent(t.content.error);
+    expect(await section('about').findByRole('alert')).toHaveTextContent(t.content.error);
+  });
+
+  it('keeps the rest of the page when a section crashes on unexpected data', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    api.getFaq.mockResolvedValue({ unexpected: 'shape' });
+    renderWithLanguage(<App />);
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(t.content.error);
+    expect(document.getElementById('faq')).toBeNull();
+    expect(await screen.findAllByRole('table')).not.toHaveLength(0);
+    consoleError.mockRestore();
+  });
+
+  it('jumps to the section named in the URL when the page opens', () => {
+    window.history.replaceState(null, '', '#faq');
+    renderWithLanguage(<App />);
+
+    const faq = document.getElementById('faq');
+    expect(faq.scrollIntoView).toHaveBeenCalledWith(expect.objectContaining({ behavior: 'instant' }));
+    expect(faq.querySelector('h2')).toHaveFocus();
+  });
+
+  it('ignores a URL hash that is not a section', () => {
+    window.history.replaceState(null, '', '#not-a-section');
+    renderWithLanguage(<App />);
+
+    expect(Element.prototype.scrollIntoView).not.toHaveBeenCalled();
+  });
+
   it('has a skip link that targets the main landmark', () => {
     renderWithLanguage(<App />);
     const skip = screen.getByRole('link', { name: t.nav.skipToContent });
