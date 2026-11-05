@@ -196,3 +196,32 @@ select {
 .content-status {
   font-style: italic;
 }
+
+/* Paper. Browsers drop backgrounds when printing by default, so text made for
+   the dark panels would come out pale, and the hero would be a page of faint
+   text with no photo. */
+@media print {
+  /* Two classes or more: component CSS loads after this file and would win a tie. */
+  .site-header.site-header,
+  main .hero,
+  .instructors .instructors__controls {
+    display: none;
+  }
+
+  .section,
+  .section * {
+    color: #000 !important;
+  }
+
+  /* The row scrolls sideways on screen; on paper every card has to fit. */
+  .instructors .instructors__track {
+    --card-width: 13rem;
+    overflow: visible;
+  }
+
+  .instructors .instructors__list {
+    flex-wrap: wrap;
+    width: auto;
+    padding: 0;
+  }
+}

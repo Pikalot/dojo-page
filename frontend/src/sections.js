@@ -6,8 +6,8 @@ export const SECTIONS = [
     id: 'about',
     navKey: 'about',
     keywords: {
-      en: ['aikido', 'tenshinkai', 'history', 'dojo', 'location', 'address', 'where'],
-      vi: ['lịch sử', 'võ đường', 'địa điểm', 'địa chỉ', 'ở đâu'],
+      en: ['aikido', 'tenshinkai', 'history', 'dojo'],
+      vi: ['lịch sử', 'võ đường'],
     },
   },
   {
@@ -38,8 +38,8 @@ export const SECTIONS = [
     id: 'contact',
     navKey: 'contact',
     keywords: {
-      en: ['email', 'phone', 'message', 'map', 'directions', 'address', 'location'],
-      vi: ['email', 'điện thoại', 'tin nhắn', 'bản đồ', 'chỉ đường', 'địa chỉ'],
+      en: ['email', 'phone', 'message', 'map', 'directions', 'address', 'location', 'where'],
+      vi: ['email', 'điện thoại', 'tin nhắn', 'bản đồ', 'chỉ đường', 'địa chỉ', 'địa điểm', 'ở đâu'],
     },
   },
   {

@@ -148,6 +148,81 @@ test('switching to Vietnamese updates text and html lang, and persists on reload
   await expect(page.locator('html')).toHaveAttribute('lang', 'vi');
 });
 
+test('quick clicks on the photo arrow are not lost while it scrolls', async ({ page }, testInfo) => {
+  test.skip(isMobile(testInfo), 'Arrow buttons are hidden on phones');
+  // The bug only shows with the smooth scroll that beforeEach turns off.
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.locator('.about__photo-frame').scrollIntoViewIfNeeded();
+  const counter = page.locator('.about__photo-frame .carousel__count');
+  const total = Number((await counter.textContent()).split('/')[1]);
+  test.skip(!(total > 2), 'Needs at least three photos');
+
+  const next = page.getByRole('button', { name: 'Next photo' });
+  for (let i = 1; i < total; i += 1) await next.click();
+
+  await expect(counter).toHaveText(`${total} / ${total}`);
+  // And it stays there once the scroll has finished.
+  await page.waitForTimeout(1200);
+  await expect(counter).toHaveText(`${total} / ${total}`);
+});
+
+test('closing the photo viewer leaves focus on the photo now showing', async ({ page }) => {
+  const photos = page.locator('.carousel__open');
+  test.skip((await photos.count()) < 2, 'Needs at least two photos');
+  await photos.first().focus();
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('.photo-viewer .carousel__count')).toHaveText(/^2 \//);
+  await page.keyboard.press('Escape');
+
+  await expect(photos.nth(1)).toBeFocused();
+  await expect(page.locator('.about__photo-frame .carousel__count')).toHaveText(/^2 \//);
+});
+
+test('the open menu fits a phone in landscape', async ({ page }, testInfo) => {
+  test.skip(!isMobile(testInfo), 'Only phones use this layout at this height');
+  await page.setViewportSize({ width: 667, height: 320 });
+  await page.getByRole('button', { name: 'Open menu' }).click();
+
+  const navBottom = await page.locator('#site-menu').evaluate((el) => el.getBoundingClientRect().bottom);
+  expect(navBottom).toBeLessThanOrEqual(320);
+  // The last control can be scrolled to and used.
+  await page.getByRole('button', { name: /Tiếng Việt/ }).click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'vi');
+});
+
+test('Vietnamese nav links stay on one line just above the desktop breakpoint', async ({ page }, testInfo) => {
+  test.skip(!isDesktop(testInfo), 'Desktop layout only');
+  await page.setViewportSize({ width: 1120, height: 800 });
+  await page.getByRole('button', { name: /Tiếng Việt/ }).click();
+
+  const fit = await page.evaluate(() => {
+    const lines = [...document.querySelectorAll('.site-nav__link')].map((link) => {
+      const range = document.createRange();
+      range.selectNodeContents(link);
+      return range.getClientRects().length;
+    });
+    const search = document.querySelector('.section-search').getBoundingClientRect();
+    const nav = document.querySelector('.site-nav').getBoundingClientRect();
+    const toggle = document.querySelector('.language-toggle').getBoundingClientRect();
+    return {
+      wrapped: lines.filter((n) => n > 1).length,
+      overlapsSearch: search.right > nav.left,
+      offScreen: toggle.right > window.innerWidth,
+    };
+  });
+  expect(fit).toEqual({ wrapped: 0, overlapsSearch: false, offScreen: false });
+});
+
+test('printing shows every section, even those not scrolled to yet', async ({ page }) => {
+  await page.emulateMedia({ media: 'print', reducedMotion: 'no-preference' });
+  for (const id of ['announcements', 'schedule']) {
+    await expect(page.locator(`#${id}`)).toHaveCSS('opacity', '1');
+  }
+  await expect(page.locator('.site-header')).toBeHidden();
+  await expect(page.locator('.hero')).toBeHidden();
+});
+
 for (const language of ['en', 'vi']) {
   test(`no accessibility violations including color contrast (${language})`, async ({ page }, testInfo) => {
     // Open the menu on smaller screens so its links and language toggle are scanned too.

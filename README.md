@@ -2,21 +2,23 @@
 
 Informational website for the Tenshinkai Aikido dojo. It is being built in two phases:
 
-1. **Frontend** (current): a responsive React site using placeholder content.
-2. **Backend** (planned): Django, with staff content management, sign-in, and permissions.
+1. **Frontend**: a responsive React site. By default it reads content from local mock files; `VITE_USE_API=true` switches it to the backend.
+2. **Backend**: Django, with staff content management, sign-in, and permissions. See [backend/README.md](backend/README.md) for setup, the permission matrix, the API, and how concurrent edits work.
 
 ## Repository layout
 
 ```
+backend/           Django app: admin interface and read-only JSON API
 frontend/          React app (Vite)
   assets-src/      Original, full-size images (inputs to npm run images)
   e2e/             Playwright browser tests
   public/          Files served as-is (favicon, robots.txt)
   scripts/         Asset tooling
   src/
+    api/           One function per content resource; the only code that reads the mock files or calls the backend
     assets/        Optimized images used by the app
     components/    UI components, each with its own CSS file
-    data/          Placeholder content, shaped like the future API responses
+    data/mock/     Site content as JSON, shaped like the future API responses
     hooks/         Reusable React hooks
     i18n/          English and Vietnamese UI text, plus language state
     lib/           Plain logic (search, formatting, scrolling)
@@ -24,13 +26,44 @@ frontend/          React app (Vite)
     sections.js    Page sections used by the navbar and the search
 ```
 
-## Running the frontend
+## How it works
 
-You need Node.js 20.19 or newer (it has been tested on Node 25).
+```
+Visitor -> React site -> /api/... (read-only) -> Django -> MySQL
+Staff   -> /admin/ (sign-in required)         -> Django -> MySQL
+```
+
+- Visitors read the React site. It only ever reads published content, through the API.
+- Staff edit content in the Django admin. Saves are checked against the version they loaded, so nobody silently overwrites someone else's work.
+- The About text, federation text, contact details and location have no database tables yet, so they still come from `frontend/src/data/mock/`.
+
+## Running the whole app
+
+You need Node.js 20.19 or newer, Python 3.12 or newer, and MySQL 8.4 or newer running.
+
+**First time only.** Follow the setup in [backend/README.md](backend/README.md) to create the database, `backend/.env` and your admin account. Then install the frontend with `cd frontend && npm install`.
+
+**Each time**, in two terminals:
+
+```sh
+# Terminal 1: backend, at http://127.0.0.1:8000/admin/
+cd backend
+source .venv/bin/activate
+python manage.py runserver
+```
+
+```sh
+# Terminal 2: website, at http://localhost:5173
+cd frontend
+VITE_USE_API=true npm run dev
+```
+
+Without `VITE_USE_API=true`, the website uses only the mock files and doesn't need the backend at all. New records are drafts until published, so they don't appear on the website before that.
+
+## Frontend commands
 
 ```sh
 cd frontend
-npm install
 npm run dev        # development server at http://localhost:5173
 npm run build      # production build in frontend/dist
 npm run preview    # serve the production build at http://localhost:4173
@@ -51,6 +84,9 @@ What the browser tests check:
 - The header hides when scrolling down and comes back when scrolling up.
 - The skip link, keyboard search, and sideways scrolling of the instructor row.
 - Switching language, and that the choice is remembered.
+- The photo carousel and viewer: quick arrow clicks, and where focus lands on closing.
+- The menu on a phone in landscape, and Vietnamese nav labels at the narrowest desktop width.
+- Printing shows every section.
 - Accessibility checks with axe, including color contrast, in both languages.
 
 The browser tests block Google Maps so they don't depend on the network. The map itself is checked by hand.
@@ -59,10 +95,14 @@ When a test fails, Playwright prints which width it failed at, and saves a trace
 
 ## Images
 
-Full-size images go in `frontend/assets-src/`. Running `npm run images` (needs macOS `sips` and `cwebp`, from `brew install webp`) creates resized WebP and JPEG copies in `src/assets/hero/`. Those generated copies are committed, so this only needs to run again when a source image changes.
+Full-size images go in `frontend/assets-src/`. Running `npm run images` (needs macOS `sips` and `cwebp`, from `brew install webp`) creates resized WebP and JPEG copies of the hero in `src/assets/hero/`, plus the navbar logo (`src/assets/logo.webp`). Those generated copies are committed, so this only needs to run again when a source image changes.
 
-## Placeholder content
+The dojo photos are not part of this. They are hosted on Cloudinary, and their URLs are in `src/data/mock/dojoPhotos.json`.
 
-Everything in `frontend/src/data/siteContent.js` is a placeholder. That includes the text, ranks (`Xth Dan`), and contact details. The logo and instructor photos are placeholders too. A note in the page footer says the content isn't final.
+## Content
 
-The Vietnamese UI text in `frontend/src/i18n/strings.js` is a first draft and needs review by a native speaker.
+Site content is in `frontend/src/data/mock/*.json`, and components get it through `src/api/content.js`. With `VITE_USE_API=true`, announcements, schedule, instructors, FAQ and dojo photos come from the backend instead. The About text, federation text, contact details and location have no database tables yet, so they stay in the mock files either way.
+
+Still to fill in: instructor bios and photos (cards show the dojo logo until a photo exists), and the Vietnamese About text in `about.json`, which is still in English.
+
+The Vietnamese text in `frontend/src/i18n/strings.js` and the mock files is a first draft and needs review by a native speaker.

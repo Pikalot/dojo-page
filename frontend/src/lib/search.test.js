@@ -36,12 +36,17 @@ describe('search', () => {
   });
 
   it('ranks label matches above keyword matches', () => {
-    // "contact" is a label; "address" keywords also point at about/contact.
     expect(ids(search(index, 'con'))[0]).toBe('contact');
   });
 
+  it('sends location searches to Contact, where the address and map are', () => {
+    for (const query of ['address', 'location', 'where', 'dia chi', 'o dau']) {
+      expect(ids(search(index, query))).toEqual(['contact']);
+    }
+  });
+
   it('returns several sections when a keyword is shared, in page order', () => {
-    expect(ids(search(index, 'address'))).toEqual(['about', 'contact']);
+    expect(ids(search(index, 'class'))).toEqual(['schedule', 'faq']);
   });
 
   it('returns nothing when no section matches', () => {

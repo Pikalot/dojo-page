@@ -105,8 +105,8 @@
   padding-top: var(--space-2);
 }
 
-/* Skip the effect for visitors who ask for less motion. */
-@media (prefers-reduced-motion: reduce) {
+/* Skip the effect for visitors who ask for less motion, and when printing. */
+@media (prefers-reduced-motion: reduce), print {
   .about__photo-frame[data-effect] .about__photo {
     opacity: 1;
     transform: none;

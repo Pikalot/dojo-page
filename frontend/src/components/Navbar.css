@@ -81,6 +81,10 @@
   padding: var(--space-3) var(--gutter) var(--space-5);
   background: var(--color-ink);
   box-shadow: 0 12px 24px rgb(0 0 0 / 0.3);
+  /* The header is fixed, so a menu taller than the screen (a phone in landscape)
+     has to scroll by itself or its last items cannot be reached. */
+  max-height: calc(100dvh - var(--header-height));
+  overflow-y: auto;
 }
 
 .site-nav[data-open='true'] {
@@ -121,6 +125,8 @@
     padding: 0;
     background: none;
     box-shadow: none;
+    max-height: none;
+    overflow-y: visible;
   }
 
   .site-nav__list {
@@ -132,5 +138,6 @@
   .site-nav__link {
     padding: var(--space-2) var(--space-3);
     font-size: var(--text-base);
+    white-space: nowrap;            /* longer Vietnamese labels stay on one line */
   }
 }
