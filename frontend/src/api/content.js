@@ -8,6 +8,7 @@
 //
 // Translatable fields come back as { en, vi }; useContent() picks the language.
 
+import { shareResult } from './shared.js';
 import about from '../data/mock/about.json';
 import subcontent from '../data/mock/subcontent.json';
 import announcements from '../data/mock/announcements.json';
@@ -31,7 +32,8 @@ async function request(path) {
 }
 
 // Read when called rather than once at startup, so tests can switch it.
-const fromApi = (path, fallback) => (import.meta.env.VITE_USE_API === 'true' ? request(path) : mock(fallback));
+const useApi = () => import.meta.env.VITE_USE_API === 'true';
+const fromApi = (path, fallback) => (useApi() ? request(path) : mock(fallback));
 
 export const getAbout = () => mock(about);
 export const getLocation = () => mock(location);
@@ -40,5 +42,7 @@ export const getSubcontent = () => mock(subcontent);
 export const getAnnouncements = () => fromApi('/api/announcements', announcements);
 export const getSchedule = () => fromApi('/api/schedule', schedule);
 export const getFaq = () => fromApi('/api/faq', faq);
-export const getInstructors = () => fromApi('/api/instructors', instructors);
+// Used by both the Instructors section and the search box, so they share one request.
+export const getInstructors = () =>
+  useApi() ? shareResult('/api/instructors', () => request('/api/instructors')) : mock(instructors);
 export const getDojoPhotos = () => fromApi('/api/dojo-photos', dojoPhotos);

@@ -30,8 +30,8 @@ export const SECTIONS = [
     id: 'instructors',
     navKey: 'instructors',
     keywords: {
-      en: ['teachers', 'sensei', 'dojo head', 'staff', 'rank'],
-      vi: ['thầy', 'võ sư', 'giáo viên', 'trưởng võ đường', 'đẳng cấp'],
+      en: ['teachers', 'sensei', 'dojo head', 'staff', 'rank', 'black belt'],
+      vi: ['thầy', 'võ sư', 'giáo viên', 'trưởng võ đường', 'đẳng cấp', 'đai đen', 'huyền đai'],
     },
   },
   {

@@ -81,7 +81,7 @@ test('first Tab reaches the skip link, which moves focus to main content', async
 });
 
 test('keyboard search jumps to a section and focuses its heading', async ({ page }) => {
-  const search = page.getByRole('combobox', { name: 'Jump to a section' });
+  const search = page.getByRole('combobox', { name: 'Search sections and instructors' });
   await search.focus();
   await page.keyboard.type('sched');
   await page.keyboard.press('ArrowDown');
@@ -94,7 +94,7 @@ test('keyboard search jumps to a section and focuses its heading', async ({ page
 });
 
 test('Escape closes the search results first, then clears the text', async ({ page }) => {
-  const search = page.getByRole('combobox', { name: 'Jump to a section' });
+  const search = page.getByRole('combobox', { name: 'Search sections and instructors' });
   await search.focus();
   await page.keyboard.type('sched');
   await expect(search).toHaveAttribute('aria-expanded', 'true');
@@ -146,6 +146,73 @@ test('switching to Vietnamese updates text and html lang, and persists on reload
 
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('lang', 'vi');
+});
+
+// Names and ranks are content, so these read them from the page.
+test('searching a name and choosing the person opens their profile', async ({ page }) => {
+  const name = await page.locator('.instructor-card__open').first().textContent();
+  const search = page.getByRole('combobox', { name: 'Search sections and instructors' });
+
+  await search.fill(name);
+  await page.getByRole('option', { name }).first().click();
+
+  const profile = page.getByRole('dialog', { name });
+  await expect(profile).toBeVisible();
+  await expect(page).toHaveURL(/#instructors$/);
+
+  await page.keyboard.press('Escape');
+  await expect(profile).toBeHidden();
+  await expect(page.locator('#instructors-title')).toBeFocused();
+});
+
+test('searching a rank lists everyone at that rank, and a black belt jumps to the list', async ({ page }) => {
+  const group = page.locator('.black-belts__group').first();
+  await group.waitFor({ state: 'attached' });
+  const rank = await group.locator('.black-belts__rank').textContent();
+  const members = await group.locator('li').allTextContents();
+  const search = page.getByRole('combobox', { name: 'Search sections and instructors' });
+
+  await search.fill(rank);
+  for (const member of members) {
+    await expect(page.getByRole('option', { name: member })).toBeVisible();
+  }
+  await page.getByRole('option', { name: members[0] }).click();
+
+  const chosen = page.locator('#black-belts li', { hasText: members[0] });
+  await expect(chosen).toBeFocused();
+  await expect(chosen).toHaveAttribute('data-highlighted', 'true');
+  await expect(chosen).toBeInViewport();
+  await expect(page.locator('#black-belts li[data-highlighted]')).toHaveCount(1);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(page).toHaveURL(/#black-belts$/);
+
+  await expect(chosen).not.toHaveAttribute('data-highlighted', 'true', { timeout: 5000 });
+});
+
+test('typing a dan number or "black belt" finds people', async ({ page }) => {
+  const search = page.getByRole('combobox', { name: 'Search sections and instructors' });
+  await search.fill('1st dan');
+  await expect(page.getByRole('option').first()).toBeVisible();
+  await search.fill('black belt');
+  await expect(page.getByRole('option', { name: 'Instructors' })).toBeVisible();
+  await expect(page.getByRole('option').nth(1)).toBeVisible();
+});
+
+test('the keyboard can reach and choose a person far down a long list', async ({ page }) => {
+  const group = page.locator('.black-belts__group').last();
+  await group.waitFor({ state: 'attached' });
+  const rank = await group.locator('.black-belts__rank').textContent();
+  const search = page.getByRole('combobox', { name: 'Search sections and instructors' });
+
+  await search.fill(rank);
+  await page.getByRole('option').first().waitFor();
+  const count = await page.getByRole('option').count();
+  for (let i = 0; i < count; i += 1) await page.keyboard.press('ArrowDown');
+
+  await expect(page.getByRole('option').last()).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('option').last()).toBeInViewport();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#black-belts li[data-highlighted]')).toBeFocused();
 });
 
 test('quick clicks on the photo arrow are not lost while it scrolls', async ({ page }, testInfo) => {

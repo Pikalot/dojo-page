@@ -70,4 +70,68 @@ describe('Instructors', () => {
       expect(screen.queryByRole('button', { name })).not.toBeInTheDocument();
     }
   });
+
+  it('opens a profile when the search box asks for one', async () => {
+    const { openInstructorProfile } = await import('../lib/instructorProfile.js');
+    const { act } = await import('@testing-library/react');
+    renderWithLanguage(<Instructors />);
+    const person = content.getInstructors.instructors[0];
+    await screen.findByRole('button', { name: person.name });
+
+    act(() => openInstructorProfile(person.id));
+
+    const dialog = await screen.findByRole('dialog');
+    expect(within(dialog).getByRole('heading', { name: person.name })).toBeInTheDocument();
+  });
+
+  it('ignores a request for someone who is not on the page', async () => {
+    const { openInstructorProfile } = await import('../lib/instructorProfile.js');
+    const { act } = await import('@testing-library/react');
+    renderWithLanguage(<Instructors />);
+    await screen.findByRole('button', { name: content.getInstructors.instructors[0].name });
+
+    act(() => openInstructorProfile('nobody'));
+
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
+  it('highlights and focuses a black belt on request, then lets go', async () => {
+    const { highlightBlackBelt } = await import('../lib/instructorProfile.js');
+    const { act } = await import('@testing-library/react');
+    renderWithLanguage(<Instructors />);
+    const member = content.getInstructors.blackBelts[0].members[0];
+    const name = await screen.findByText(member.name);
+    expect(name).not.toHaveAttribute('data-highlighted');
+
+    vi.useFakeTimers();
+    try {
+      act(() => highlightBlackBelt(member.id));
+      expect(name).toHaveAttribute('data-highlighted');
+      expect(name).toHaveFocus();
+
+      // Choosing them again restarts the time.
+      act(() => vi.advanceTimersByTime(2000));
+      act(() => highlightBlackBelt(member.id));
+      act(() => vi.advanceTimersByTime(2000));
+      expect(name).toHaveAttribute('data-highlighted');
+
+      act(() => vi.advanceTimersByTime(1000));
+      expect(name).not.toHaveAttribute('data-highlighted');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('highlights only the requested person', async () => {
+    const { highlightBlackBelt } = await import('../lib/instructorProfile.js');
+    const { act } = await import('@testing-library/react');
+    renderWithLanguage(<Instructors />);
+    const [first, second] = content.getInstructors.blackBelts.flatMap((group) => group.members);
+    await screen.findByText(first.name);
+
+    act(() => highlightBlackBelt(first.id));
+
+    expect(screen.getByText(first.name)).toHaveAttribute('data-highlighted');
+    expect(screen.getByText(second.name)).not.toHaveAttribute('data-highlighted');
+  });
 });

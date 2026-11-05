@@ -83,6 +83,7 @@ What the browser tests check:
 - The navbar shows the menu button on smaller screens and inline links on desktop.
 - The header hides when scrolling down and comes back when scrolling up.
 - The skip link, keyboard search, and sideways scrolling of the instructor row.
+- Searching instructors by name or rank: opening a profile, and jumping to the black belt list.
 - Switching language, and that the choice is remembered.
 - The photo carousel and viewer: quick arrow clicks, and where focus lands on closing.
 - The menu on a phone in landscape, and Vietnamese nav labels at the narrowest desktop width.
