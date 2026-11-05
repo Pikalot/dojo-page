@@ -63,6 +63,6 @@ Full-size images go in `frontend/assets-src/`. Running `npm run images` (needs m
 
 ## Placeholder content
 
-Everything in `frontend/src/data/siteContent.js` is a placeholder. That includes the text, prices (`$XX`), ranks (`Xth Dan`), and contact details. The address and map point at San José State University for now. The logo and instructor photos are placeholders too. A note in the page footer says the content isn't final.
+Everything in `frontend/src/data/siteContent.js` is a placeholder. That includes the text, ranks (`Xth Dan`), and contact details. The logo and instructor photos are placeholders too. A note in the page footer says the content isn't final.
 
 The Vietnamese UI text in `frontend/src/i18n/strings.js` is a first draft and needs review by a native speaker.

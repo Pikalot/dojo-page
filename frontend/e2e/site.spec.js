@@ -83,14 +83,37 @@ test('first Tab reaches the skip link, which moves focus to main content', async
 test('keyboard search jumps to a section and focuses its heading', async ({ page }) => {
   const search = page.getByRole('combobox', { name: 'Jump to a section' });
   await search.focus();
-  await page.keyboard.type('fees');
+  await page.keyboard.type('sched');
   await page.keyboard.press('ArrowDown');
   await page.keyboard.press('Enter');
 
-  const heading = page.getByRole('heading', { name: 'Fees', level: 2 });
+  const heading = page.getByRole('heading', { name: 'Schedule', level: 2 });
   await expect(heading).toBeFocused();
   await expect(heading).toBeInViewport();
-  await expect(page).toHaveURL(/#fees$/);
+  await expect(page).toHaveURL(/#schedule$/);
+});
+
+test('Escape closes the search results first, then clears the text', async ({ page }) => {
+  const search = page.getByRole('combobox', { name: 'Jump to a section' });
+  await search.focus();
+  await page.keyboard.type('sched');
+  await expect(search).toHaveAttribute('aria-expanded', 'true');
+
+  await page.keyboard.press('Escape');
+  await expect(search).toHaveAttribute('aria-expanded', 'false');
+  await expect(search).toHaveValue('sched');
+
+  await page.keyboard.press('Escape');
+  await expect(search).toHaveValue('');
+});
+
+test('a shared section link opens at that section', async ({ page }) => {
+  await page.goto('about:blank'); // a new load, not a jump within the open page
+  await page.goto('/#instructors');
+
+  const heading = page.getByRole('heading', { name: 'Instructors', level: 2 });
+  await expect(heading).toBeFocused();
+  await expect(heading).toBeInViewport();
 });
 
 test('instructor row scrolls sideways', async ({ page }, testInfo) => {
@@ -119,7 +142,7 @@ test('switching to Vietnamese updates text and html lang, and persists on reload
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'vi');
   await expect(page.getByRole('heading', { name: 'Lịch tập', level: 2 })).toBeVisible();
-  await expect(page).toHaveTitle('Võ đường Aikido Tenshinkai');
+  await expect(page).toHaveTitle('Võ đường Aikido Tenshinkai tại San Jose');
 
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('lang', 'vi');

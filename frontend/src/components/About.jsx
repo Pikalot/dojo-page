@@ -5,10 +5,10 @@ import { SubAbout } from './SubAbout.jsx';
 
 export function About() {
   return (
-    <section id="about" className="section about" aria-labelledby="about-title">
+    <div id="about" className="section about">
       <Dojo />
       <Divider />
       <SubAbout />
-    </section>
+    </div>
   );
 }

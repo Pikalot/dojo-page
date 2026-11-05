@@ -14,7 +14,7 @@ export const SECTIONS = [
     id: 'announcements',
     navKey: 'announcements',
     keywords: {
-      en: ['info', 'news', 'events', 'updates', 'seminar'],
+      en: ['info', 'news', 'events', 'updates', 'seminar', 'announcements'],
       vi: ['thông tin', 'tin tức', 'sự kiện', 'cập nhật'],
     },
   },

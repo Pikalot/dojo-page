@@ -131,6 +131,6 @@
 
   .site-nav__link {
     padding: var(--space-2) var(--space-3);
-    font-size: var(--text-med);
+    font-size: var(--text-base);
   }
 }

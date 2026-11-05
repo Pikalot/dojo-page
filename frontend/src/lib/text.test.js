@@ -17,11 +17,16 @@ describe('toParagraphs', () => {
   it('returns nothing for empty or missing text', () => {
     expect(toParagraphs('')).toEqual([]);
     expect(toParagraphs(undefined)).toEqual([]);
+    expect(toParagraphs(null)).toEqual([]);
   });
 });
 
 describe('toLines', () => {
   it('splits an address into trimmed, non-empty lines', () => {
     expect(toLines(' 1 Main St \n\nSan Jose, CA ')).toEqual(['1 Main St', 'San Jose, CA']);
+  });
+
+  it('returns nothing for empty or missing text', () => {
+    expect(toLines(null)).toEqual([]);
   });
 });

@@ -37,3 +37,6 @@ frontend/blob-report/
 
 # Private implementation notes (decision log, working notes)
 docs/private/
+
+# Local database queries
+dbqueries/
