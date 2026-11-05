@@ -68,6 +68,35 @@ Read-only and public. Only published content is returned. Translatable fields ar
 
 Anyone with no role in the database is listed in `blackBelts` rather than `instructors`.
 
+## Photo upload
+
+Staff with the Photos category, and admins, can drop one or many photos at **Photos > Upload photos**. Each needs a description in both languages. Add these to `.env`, from the API Keys page in the Cloudinary console, then restart the server:
+
+```
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+```
+
+The browser sends each photo to Django, never to Cloudinary, so the secret stays on the server. For each photo:
+
+1. Check permissions, the descriptions and the file. The file must really be a JPEG, PNG or WebP, up to 10 MB and 50 megapixels. SVG is refused because it can run scripts.
+2. Rebuild the image from its pixels, which removes GPS locations and other hidden data, and resize it to at most 2400 px on its longest side.
+3. Upload it to Cloudinary under a random name, outside any database transaction.
+4. Save the returned link in one transaction, together with the carousel position and the admin history entry. If that fails, the upload is deleted from Cloudinary.
+
+Photos are independent: one failing doesn't affect the others, and it can be retried. New photos are drafts unless "Publish right away" is ticked.
+
+**Deleting.** Only admins can delete a photo. That also permanently deletes its file from Cloudinary, after the database change has committed, so a rollback or a version conflict leaves the file alone. The file's id is read from the saved link. A file stays if the link points anywhere but this project's Cloudinary account, or if another photo uses the same link. Removing a photo from the carousel or from an instructor doesn't delete anything on Cloudinary.
+
+**Limitations**
+
+- If saving fails and deleting from Cloudinary also fails, an unused file stays there. The `dojo.content` log records its id, so it can be removed by hand.
+- If deleting a photo's file fails, the record stays deleted, and the admin who deleted it gets a warning with the file's id so it can be removed by hand.
+- Changing a photo's link in the admin leaves the old file on Cloudinary.
+- Uploads are limited to 100 per user per hour. See the note on shared caches under Deployment.
+- Requests go through Django, so the web server must allow request bodies of at least 10 MB.
+
 ## Concurrent edits
 
 Content uses optimistic concurrency control. Each record has a `version` number and an `updated_at` time on its `Contents` row.

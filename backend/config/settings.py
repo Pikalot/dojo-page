@@ -118,10 +118,19 @@ if os.environ.get("EMAIL_HOST"):
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
+# Photo upload. The API secret stays on the server; see content/cloudinary_client.py.
+CLOUDINARY_CLOUD_NAME = os.environ.get("CLOUDINARY_CLOUD_NAME", "")
+CLOUDINARY_API_KEY = os.environ.get("CLOUDINARY_API_KEY", "")
+CLOUDINARY_API_SECRET = os.environ.get("CLOUDINARY_API_SECRET", "")
+PHOTO_UPLOAD_MAX_BYTES = 10 * 1024 * 1024
+PHOTO_UPLOAD_MAX_PIXELS = 50_000_000
+PHOTO_UPLOAD_MAX_DIMENSION = 2400  # Longest side after resizing; plenty for a full-screen viewer.
+
 # Sensitive endpoints: (allowed attempts, window in seconds). See accounts/ratelimit.py.
 LOGIN_RATE_LIMIT_PER_ACCOUNT = (5, 15 * 60)
 LOGIN_RATE_LIMIT_PER_IP = (20, 15 * 60)
 PASSWORD_RESET_RATE_LIMIT = (5, 60 * 60)
+PHOTO_UPLOAD_RATE_LIMIT = (100, 60 * 60)  # Per user. Protects the Cloudinary quota.
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = "same-origin"

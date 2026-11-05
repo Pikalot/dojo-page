@@ -97,7 +97,7 @@ export const strings = {
       label: 'Chính',
       home: 'Trang chủ Aikido Tenshinkai',
       about: 'Giới thiệu',
-      announcements: 'Tin tức & Sự kiện',
+      announcements: 'Tin tức',
       schedule: 'Lịch tập',
       instructors: 'Huấn luyện viên',
       contact: 'Liên hệ',

@@ -6,6 +6,9 @@ between reading this page and pressing the button.
 {% endcomment %}
 {% block delete_confirm %}
     <p>{% blocktranslate %}Are you sure you want to delete the {{ object_name }} “{{ escaped_object }}”? All of the following related items will be deleted:{% endblocktranslate %}</p>
+    {% if deletes_cloudinary_file %}
+      <p class="errornote">This also permanently deletes the image file from Cloudinary. It can't be restored.</p>
+    {% endif %}
     {% include "admin/includes/object_delete_summary.html" %}
     <h2>{% translate "Objects" %}</h2>
     <ul id="deleted-objects">{{ deleted_objects|unordered_list }}</ul>

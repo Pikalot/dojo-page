@@ -20,6 +20,11 @@ SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 ALLOWED_HOSTS = ["testserver"]
 
+# Fake values. Tests replace the Cloudinary calls, so nothing is ever sent.
+CLOUDINARY_CLOUD_NAME = "test-cloud"
+CLOUDINARY_API_KEY = "test-key"
+CLOUDINARY_API_SECRET = "test-secret"
+
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]  # Speed only.
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}}

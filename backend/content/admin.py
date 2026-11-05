@@ -4,11 +4,17 @@ transaction also covers inline rows and the audit log entry, so a failure at any
 step undoes the whole request."""
 from django import forms
 from django.contrib import admin, messages
+from django.conf import settings
 from django.contrib.admin.utils import unquote
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.http import HttpResponseNotAllowed, JsonResponse
 from django.template.response import TemplateResponse
-from django.urls import reverse
+from django.urls import path, reverse
 
-from . import services
+from accounts import ratelimit
+
+from . import cloudinary_client, services
+from .images import InvalidImage
 from .models import (
     Announcement,
     ClassType,
@@ -238,6 +244,96 @@ class PhotoAdmin(VersionedContentAdmin):
     list_display = ("alt_en", "is_published", "updated_at")
     search_fields = ("alt_en", "alt_vi")
     inlines = (DojoPhotoInline, PortraitInline)
+
+    def delete_model(self, request, obj):
+        def tell_about_kept_file(public_id):
+            self.message_user(
+                request,
+                f"The photo was deleted, but its file is still on Cloudinary: {public_id}. Please remove it there.",
+                messages.WARNING,
+            )
+
+        services.delete_photo(obj, request.POST.get("expected_version"), on_file_kept=tell_about_kept_file)
+
+    def render_delete_form(self, request, context):
+        context["deletes_cloudinary_file"] = (
+            cloudinary_client.public_id_from_url(context["object"].src_link) is not None
+        )
+        return super().render_delete_form(request, context)
+
+    def get_urls(self):
+        # admin_view adds the sign-in check and CSRF protection.
+        return [
+            path("upload/", self.admin_site.admin_view(self.upload_view), name="content_photo_upload"),
+            *super().get_urls(),
+        ]
+
+    def upload_view(self, request):
+        """The drop-box page on GET. On POST, stores one photo and answers in JSON."""
+        if not self.has_add_permission(request):
+            raise PermissionDenied
+        can_publish = self.has_publish_permission(request)
+        can_add_to_carousel = request.user.has_perm("content.add_dojophoto")
+
+        if request.method == "GET":
+            context = {
+                **self.admin_site.each_context(request),
+                "opts": self.opts,
+                "title": "Upload photos",
+                "configured": cloudinary_client.is_configured(),
+                "can_publish": can_publish,
+                "can_add_to_carousel": can_add_to_carousel,
+                "max_bytes": settings.PHOTO_UPLOAD_MAX_BYTES,
+                "max_mb": settings.PHOTO_UPLOAD_MAX_BYTES // (1024 * 1024),
+            }
+            return TemplateResponse(request, "admin/content/photo_upload.html", context)
+        if request.method != "POST":
+            return HttpResponseNotAllowed(["GET", "POST"])
+
+        def failed(message, status):
+            return JsonResponse({"error": message}, status=status)
+
+        limit, window = settings.PHOTO_UPLOAD_RATE_LIMIT
+        user_key = str(request.user.pk)
+        if ratelimit.is_blocked("photo-upload", user_key, limit):
+            return failed("Too many uploads. Please wait a while and try again.", 429)
+
+        image_file = request.FILES.get("file")
+        if image_file is None:
+            return failed("No file was received.", 400)
+
+        ratelimit.record_attempt("photo-upload", user_key, window)
+        try:
+            photo = services.create_uploaded_photo(
+                image_file,
+                alt_en=request.POST.get("alt_en", ""),
+                alt_vi=request.POST.get("alt_vi", ""),
+                author=request.user,
+                # Asking without the permission is ignored, like other read-only fields.
+                add_to_carousel=can_add_to_carousel and "add_to_carousel" in request.POST,
+                publish=can_publish and "publish" in request.POST,
+            )
+        except InvalidImage as exc:
+            return failed(str(exc), 400)
+        except ValidationError as exc:
+            if {"alt_en", "alt_vi"} & set(exc.message_dict):
+                return failed("Please describe the photo in both languages, in 500 characters or fewer.", 400)
+            return failed("This photo could not be saved.", 400)
+        except cloudinary_client.CloudinaryNotConfigured:
+            return failed("Photo upload isn't set up yet.", 503)
+        except cloudinary_client.CloudinaryUploadFailed:
+            return failed("Cloudinary didn't accept this photo. Nothing was saved. Please try again.", 502)
+        except services.ContentError:
+            return failed("This photo could not be saved, and its upload was undone. Please try again.", 409)
+
+        return JsonResponse(
+            {
+                "id": photo.pk,
+                "url": photo.src_link,
+                "change_url": reverse("admin:content_photo_change", args=[photo.pk]),
+            },
+            status=201,
+        )
 
 
 # Lookup tables. Not content: they carry no version (see README), and only

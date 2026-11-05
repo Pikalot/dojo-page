@@ -18,11 +18,14 @@ fails, the version bump rolls back with it.
 import logging
 from contextlib import contextmanager
 
+from django.contrib.admin.models import ADDITION, LogEntry
 from django.db import DataError, IntegrityError, OperationalError, transaction
-from django.db.models import F
+from django.db.models import F, Max
 from django.db.models.functions import Now
 
-from .models import Content
+from . import cloudinary_client
+from .images import prepare_image
+from .models import Content, DojoPhoto, Photo
 
 logger = logging.getLogger("dojo.content")
 
@@ -180,3 +183,62 @@ def set_published(content_ids, is_published):
             .exclude(is_published=is_published)
             .update(is_published=is_published, version=F("version") + 1, updated_at=Now())
         )
+
+
+def create_uploaded_photo(image_file, *, alt_en, alt_vi, author, add_to_carousel=False, publish=False):
+    """Cleans an image, stores it on Cloudinary and records it, for one photo.
+
+    Cloudinary can't join a database transaction, so the order matters. Everything
+    that can be refused is checked before the upload, nothing holds a database
+    lock during the upload, and if saving fails afterwards, the upload is deleted.
+
+    Raises ValidationError, images.InvalidImage or a cloudinary_client error before
+    anything is stored, and a ContentError if saving failed and was undone.
+    """
+    photo = Photo(alt_en=alt_en.strip(), alt_vi=alt_vi.strip(), is_published=publish, author=author)
+    photo.full_clean(exclude=["src_link", "content_ptr"])
+    image_bytes = prepare_image(image_file)
+
+    uploaded = cloudinary_client.upload_image(image_bytes)
+    try:
+        photo.src_link = uploaded.url
+        photo.clean_fields(exclude=[f.name for f in Photo._meta.fields if f.name != "src_link"])
+        with translate_database_errors(), transaction.atomic():
+            create_content(photo, author)
+            if add_to_carousel:
+                # Two uploads at once may get the same number; the API then orders by id.
+                highest = DojoPhoto.objects.aggregate(highest=Max("sort_order"))["highest"]
+                DojoPhoto.objects.create(photo=photo, sort_order=(highest or 0) + 1)
+            # Inside the transaction: the record exists only if the photo does.
+            LogEntry.objects.log_actions(author.pk, [photo], ADDITION, change_message="Uploaded to Cloudinary")
+    except Exception:
+        cloudinary_client.delete_image(uploaded.public_id)
+        raise
+    return photo
+
+
+def delete_photo(photo, expected_version, on_file_kept=None):
+    """Deletes a photo record and then its file on Cloudinary.
+
+    A file can't be restored, so it goes only after the record's deletion has
+    really committed, including any transaction the caller has open. A rollback or
+    a version conflict therefore leaves the file alone. Links to anything but this
+    project's account, and files another photo still uses, are kept.
+
+    If the file can't be removed, the record stays deleted and on_file_kept(id) is
+    called, so the person can be told. The id is also logged.
+    """
+    _require_saved_content(photo)
+    public_id = cloudinary_client.public_id_from_url(photo.src_link)
+    in_use_elsewhere = Photo.objects.filter(src_link=photo.src_link).exclude(pk=photo.pk).exists()
+
+    delete_content(photo, expected_version)
+
+    if public_id is None or in_use_elsewhere:
+        return
+
+    def remove_file():
+        if not cloudinary_client.delete_image(public_id) and on_file_kept:
+            on_file_kept(public_id)
+
+    transaction.on_commit(remove_file)
