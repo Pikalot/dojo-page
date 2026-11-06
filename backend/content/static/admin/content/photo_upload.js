@@ -44,7 +44,6 @@
     field.type = 'text';
     field.id = id;
     field.maxLength = 500;
-    field.required = true;
     wrap.append(field);
     return { wrap, field };
   }
@@ -85,6 +84,7 @@
     const vietnamese = textField(`alt-vi-${nextId}`, 'Describe this photo (Vietnamese)');
     card.altEn = english.field;
     card.altVi = vietnamese.field;
+    window.dojoTranslation.attach(english.field, vietnamese.field);
 
     const remove = document.createElement('button');
     remove.type = 'button';
@@ -174,15 +174,17 @@
     if (uploading) return;
 
     const cards = waitingCards();
-    const invalid = cards.flatMap((card) => [card.altEn, card.altVi]).filter((field) => !field.value.trim());
+    const invalid = cards.filter((card) => !card.altEn.value.trim() && !card.altVi.value.trim());
     if (invalid.length) {
-      status.textContent = 'Please describe every photo in both languages. Screen readers read this to people who can’t see it.';
-      invalid[0].focus();
+      status.textContent = 'Please describe every photo in at least one language. Screen readers read this to people who can\u2019t see it.';
+      invalid[0].altEn.focus();
       return;
     }
 
+    // Pressing Upload right after typing also starts a translation. Include it.
     uploading = true;
     refresh();
+    await window.dojoTranslation.settled();
     let saved = 0;
     for (const [index, card] of cards.entries()) {
       status.textContent = `Uploading ${index + 1} of ${cards.length}…`;

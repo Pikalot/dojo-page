@@ -126,11 +126,22 @@ PHOTO_UPLOAD_MAX_BYTES = 10 * 1024 * 1024
 PHOTO_UPLOAD_MAX_PIXELS = 50_000_000
 PHOTO_UPLOAD_MAX_DIMENSION = 2400  # Longest side after resizing; plenty for a full-screen viewer.
 
+# Automatic translation. The key stays on the server; see content/translation.py.
+AZURE_TRANSLATOR_KEY = os.environ.get("AZURE_TRANSLATOR_KEY", "")
+AZURE_TRANSLATOR_REGION = os.environ.get("AZURE_TRANSLATOR_REGION", "")
+AZURE_TRANSLATOR_ENDPOINT = os.environ.get(
+    "AZURE_TRANSLATOR_ENDPOINT", "https://api.cognitive.microsofttranslator.com/translate"
+)
+TRANSLATION_MAX_CHARACTERS = 5000
+# About a thirtieth of the 2 million free characters a month.
+TRANSLATION_DAILY_CHARACTER_LIMIT = 60_000
+
 # Sensitive endpoints: (allowed attempts, window in seconds). See accounts/ratelimit.py.
 LOGIN_RATE_LIMIT_PER_ACCOUNT = (5, 15 * 60)
 LOGIN_RATE_LIMIT_PER_IP = (20, 15 * 60)
 PASSWORD_RESET_RATE_LIMIT = (5, 60 * 60)
 PHOTO_UPLOAD_RATE_LIMIT = (100, 60 * 60)  # Per user. Protects the Cloudinary quota.
+TRANSLATION_RATE_LIMIT = (200, 60 * 60)  # Per user. Protects the translation quota.
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = "same-origin"

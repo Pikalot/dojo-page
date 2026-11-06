@@ -143,13 +143,13 @@ class EditWithVersionTests(AdminTestCase):
                 self.assertEqual(self.stored().version, 1)
 
     def test_validation_error_keeps_the_original_version_and_saves_nothing(self):
-        response = self.client.post(self.url, announcement_data(version=1, title_en=""))
+        response = self.client.post(self.url, announcement_data(version=1, title_en="", title_vi=""))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'name="expected_version" value="1"')
         self.assertEqual(self.stored().version, 1)
 
     def test_conflict_is_still_caught_after_a_validation_error(self):
-        self.client.post(self.url, announcement_data(version=1, title_en=""))
+        self.client.post(self.url, announcement_data(version=1, title_en="", title_vi=""))
         Content.objects.filter(pk=self.item.pk).update(version=2)  # Someone saves meanwhile.
         response = self.client.post(self.url, announcement_data(version=1))
         self.assertEqual(response.status_code, 409)

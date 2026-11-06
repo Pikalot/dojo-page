@@ -4,6 +4,7 @@ from django.urls import path
 
 from accounts.ratelimit import rate_limit_password_reset
 from content import views
+from content.translate_views import translate_view
 
 urlpatterns = [
     # The admin's login page shows a "forgotten password" link once the
@@ -18,6 +19,8 @@ urlpatterns = [
     path("admin/password_reset/done/", auth_views.PasswordResetDoneView.as_view(), name="password_reset_done"),
     path("reset/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.as_view(), name="password_reset_confirm"),
     path("reset/done/", auth_views.PasswordResetCompleteView.as_view(), name="password_reset_complete"),
+    # admin_view: signed-in staff only, with CSRF protection.
+    path("admin/translate/", admin.site.admin_view(translate_view), name="admin_translate"),
     path("admin/", admin.site.urls),
     path("api/announcements", views.announcements, name="api-announcements"),
     path("api/schedule", views.schedule, name="api-schedule"),

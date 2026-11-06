@@ -24,6 +24,8 @@ ALLOWED_HOSTS = ["testserver"]
 CLOUDINARY_CLOUD_NAME = "test-cloud"
 CLOUDINARY_API_KEY = "test-key"
 CLOUDINARY_API_SECRET = "test-secret"
+AZURE_TRANSLATOR_KEY = "test-translator-key"
+AZURE_TRANSLATOR_REGION = "test-region"
 
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]  # Speed only.
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"

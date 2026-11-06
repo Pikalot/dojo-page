@@ -68,9 +68,35 @@ Read-only and public. Only published content is returned. Translatable fields ar
 
 Anyone with no role in the database is listed in `blackBelts` rather than `instructors`.
 
+## Translation
+
+Editors write each field in English, Vietnamese or both. At least one is required, except for ranks, roles and class types, which need both because each column must be unique. The public site shows whichever language exists.
+
+To turn on automatic translation, create a free (F0) Translator resource in the Azure portal, add these to `.env`, and restart the server. Leave the region empty for a global resource:
+
+```
+AZURE_TRANSLATOR_KEY=
+AZURE_TRANSLATOR_REGION=
+```
+
+When an editor leaves a field, the browser asks Django, and Django asks Azure:
+
+- If the other language is empty, or still holds an untouched machine translation, it's filled in with a note asking the editor to check it.
+- If a person wrote the other language, nothing is overwritten. The editor gets a button to replace it.
+- If translation fails or isn't set up, a note appears, and saving still works.
+- Pressing Save or Upload right after typing waits up to 6 seconds for a translation in progress, then goes ahead regardless.
+
+The key stays on the server. The endpoint is `POST /admin/translate/`, for signed-in staff only, with a CSRF token. Limits: 5,000 characters per request, 200 requests per user per hour, and 60,000 characters a day across all users, so one busy day can't use up the free 2 million a month. Terms in `GLOSSARY` in `content/translation.py`, such as Godan and hakama, stay as written.
+
+**Limitations**
+
+- Whether text was written by a person or a machine is only known while the page is open. After a reload, all existing text counts as written by a person, so it's never overwritten without asking.
+- Whether text came from a machine isn't stored or shown on the public site. The editor reviews or corrects it, and saving counts as accepting it.
+- Rate limits and the daily budget use Django's cache. See the note on shared caches under Deployment.
+
 ## Photo upload
 
-Staff with the Photos category, and admins, can drop one or many photos at **Photos > Upload photos**. Each needs a description in both languages. Add these to `.env`, from the API Keys page in the Cloudinary console, then restart the server:
+Staff with the Photos category, and admins, can drop one or many photos at **Photos > Upload photos**. Each needs a description in at least one language. Add these to `.env`, from the API Keys page in the Cloudinary console, then restart the server:
 
 ```
 CLOUDINARY_CLOUD_NAME=

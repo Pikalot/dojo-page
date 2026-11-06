@@ -60,6 +60,9 @@ class VersionedContentAdmin(admin.ModelAdmin):
     actions = ("publish_selected", "unpublish_selected")
     delete_confirmation_template = "admin/content/delete_confirmation.html"
 
+    class Media:
+        js = ("admin/content/translate.js",)
+
     # Publishing
 
     def has_publish_permission(self, request):
@@ -196,7 +199,7 @@ class VersionedContentAdmin(admin.ModelAdmin):
 
 @admin.register(Announcement)
 class AnnouncementAdmin(VersionedContentAdmin):
-    list_display = ("title_en", "date", "is_published", "updated_at")
+    list_display = ("__str__", "date", "is_published", "updated_at")
     search_fields = ("title_en", "title_vi")
     date_hierarchy = "date"
 
@@ -211,7 +214,7 @@ class InstructorAdmin(VersionedContentAdmin):
 
 @admin.register(Faq)
 class FaqAdmin(VersionedContentAdmin):
-    list_display = ("question_en", "is_published", "updated_at")
+    list_display = ("__str__", "is_published", "updated_at")
     search_fields = ("question_en", "question_vi")
 
 
@@ -241,7 +244,7 @@ class PortraitInline(admin.TabularInline):
 
 @admin.register(Photo)
 class PhotoAdmin(VersionedContentAdmin):
-    list_display = ("alt_en", "is_published", "updated_at")
+    list_display = ("__str__", "is_published", "updated_at")
     search_fields = ("alt_en", "alt_vi")
     inlines = (DojoPhotoInline, PortraitInline)
 
@@ -317,7 +320,7 @@ class PhotoAdmin(VersionedContentAdmin):
             return failed(str(exc), 400)
         except ValidationError as exc:
             if {"alt_en", "alt_vi"} & set(exc.message_dict):
-                return failed("Please describe the photo in both languages, in 500 characters or fewer.", 400)
+                return failed("Please describe the photo in at least one language, in 500 characters or fewer.", 400)
             return failed("This photo could not be saved.", 400)
         except cloudinary_client.CloudinaryNotConfigured:
             return failed("Photo upload isn't set up yet.", 503)
@@ -348,7 +351,13 @@ class RankAdmin(admin.ModelAdmin):
 class RoleAdmin(admin.ModelAdmin):
     list_display = ("role_en", "role_vi", "seniority")
 
+    class Media:
+        js = ("admin/content/translate.js",)
+
 
 @admin.register(ClassType)
 class ClassTypeAdmin(admin.ModelAdmin):
     list_display = ("class_name_en", "class_name_vi")
+
+    class Media:
+        js = ("admin/content/translate.js",)

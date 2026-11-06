@@ -258,8 +258,14 @@ class CreateUploadedPhotoTests(CloudinaryTestCase):
         photo = self.create(alt_en="  A photo  ")
         self.assertEqual(Photo.objects.get(pk=photo.pk).alt_en, "A photo")
 
+    def test_one_language_is_enough(self):
+        for case in [{"alt_en": ""}, {"alt_vi": "   "}]:
+            with self.subTest(case=case):
+                photo = self.create(**case)
+                self.assertEqual(Photo.objects.get(pk=photo.pk).alt_en, case.get("alt_en", "A photo").strip())
+
     def test_missing_or_too_long_alt_text_stops_before_uploading(self):
-        for case in [{"alt_en": ""}, {"alt_vi": "   "}, {"alt_en": "x" * 501}]:
+        for case in [{"alt_en": "", "alt_vi": ""}, {"alt_en": " ", "alt_vi": "   "}, {"alt_en": "x" * 501}]:
             with self.subTest(case=case), self.assertRaises(ValidationError):
                 self.create(**case)
         self.upload.assert_not_called()
@@ -399,9 +405,9 @@ class UploadViewTests(CloudinaryTestCase):
         bad = as_upload(b"<script>alert(1)</script>")
         for label, data, text in [
             ("not an image", {"file": bad}, "usable image"),
-            ("no alt", {"alt_en": ""}, "both languages"),
-            ("blank alt", {"alt_vi": "   "}, "both languages"),
-            ("long alt", {"alt_vi": "x" * 501}, "both languages"),
+            ("no alt", {"alt_en": "", "alt_vi": ""}, "at least one language"),
+            ("blank alt", {"alt_en": " ", "alt_vi": "   "}, "at least one language"),
+            ("long alt", {"alt_vi": "x" * 501}, "at least one language"),
         ]:
             with self.subTest(label):
                 response = self.post(**data)

@@ -6,6 +6,7 @@ object is two rows. Never call save() or delete() on content directly: go
 through content.services, which checks the version.
 """
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.db import models
 from django.db.models import F, Q
@@ -28,6 +29,10 @@ class Content(models.Model):
         db_column="author_id",
     )
 
+    # Each needs at least one language; see clean(). Empty text, not NULL, means
+    # "not written yet", and the public site falls back to the other language.
+    translated_fields = ()
+
     class Meta:
         db_table = "Contents"
         verbose_name = "content"
@@ -35,6 +40,17 @@ class Content(models.Model):
 
     def __str__(self):
         return f"Content {self.pk}"
+
+    def clean(self):
+        super().clean()
+        errors = {}
+        for field in self.translated_fields:
+            english, vietnamese = f"{field}_en", f"{field}_vi"
+            if not (getattr(self, english) or "").strip() and not (getattr(self, vietnamese) or "").strip():
+                label = self._meta.get_field(english).verbose_name.split(" (")[0]
+                errors[english] = f"Please write the {label} in at least one language."
+        if errors:
+            raise ValidationError(errors)
 
 
 def _parent_link(column):
@@ -51,16 +67,18 @@ def _parent_link(column):
 class Announcement(Content):
     content_ptr = _parent_link("announcement_id")
     date = models.DateField()
-    title_en = models.CharField("title (English)", max_length=200)
-    title_vi = models.CharField("title (Vietnamese)", max_length=200)
-    body_en = models.TextField("body (English)")
-    body_vi = models.TextField("body (Vietnamese)")
+    title_en = models.CharField("title (English)", max_length=200, blank=True)
+    title_vi = models.CharField("title (Vietnamese)", max_length=200, blank=True)
+    body_en = models.TextField("body (English)", blank=True)
+    body_vi = models.TextField("body (Vietnamese)", blank=True)
+
+    translated_fields = ("title", "body")
 
     class Meta:
         db_table = "Announcements"
 
     def __str__(self):
-        return self.title_en
+        return self.title_en or self.title_vi
 
 
 class Rank(models.Model):
@@ -115,10 +133,12 @@ class Instructor(Content):
 
 class Faq(Content):
     content_ptr = _parent_link("faq_id")
-    question_en = models.CharField("question (English)", max_length=300)
-    question_vi = models.CharField("question (Vietnamese)", max_length=300)
-    answer_en = models.TextField("answer (English)")
-    answer_vi = models.TextField("answer (Vietnamese)")
+    question_en = models.CharField("question (English)", max_length=300, blank=True)
+    question_vi = models.CharField("question (Vietnamese)", max_length=300, blank=True)
+    answer_en = models.TextField("answer (English)", blank=True)
+    answer_vi = models.TextField("answer (Vietnamese)", blank=True)
+
+    translated_fields = ("question", "answer")
 
     class Meta:
         db_table = "FAQs"
@@ -126,7 +146,7 @@ class Faq(Content):
         verbose_name_plural = "FAQs"
 
     def __str__(self):
-        return self.question_en
+        return self.question_en or self.question_vi
 
 
 class ClassType(models.Model):
@@ -193,14 +213,16 @@ class Photo(Content):
     content_ptr = _parent_link("photo_id")
     # Only web links: a javascript: URL here would end up in an <img src>.
     src_link = models.URLField("image URL", max_length=500, validators=[URLValidator(schemes=["http", "https"])])
-    alt_en = models.CharField("alt text (English)", max_length=500)
-    alt_vi = models.CharField("alt text (Vietnamese)", max_length=500)
+    alt_en = models.CharField("alt text (English)", max_length=500, blank=True)
+    alt_vi = models.CharField("alt text (Vietnamese)", max_length=500, blank=True)
+
+    translated_fields = ("alt",)
 
     class Meta:
         db_table = "Photos"
 
     def __str__(self):
-        return self.alt_en
+        return self.alt_en or self.alt_vi
 
 
 class DojoPhoto(models.Model):
