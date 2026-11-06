@@ -1,8 +1,8 @@
 """Rate limits for login and password reset, counted in Django's cache.
 
 Limitation: the default cache is per process. With several server processes,
-each counts separately, so production should configure a shared cache. Client
-addresses come from REMOTE_ADDR, so the proxy must pass the real one.
+each counts separately, so production should run one process or configure a
+shared cache. See CLIENT_IP_HEADER in settings for where client addresses come from.
 """
 import hashlib
 from functools import wraps
@@ -13,6 +13,10 @@ from django.template.response import TemplateResponse
 
 
 def client_ip(request):
+    if settings.CLIENT_IP_HEADER:
+        forwarded = request.META.get(settings.CLIENT_IP_HEADER, "").strip()
+        if forwarded:
+            return forwarded
     return request.META.get("REMOTE_ADDR", "")
 
 

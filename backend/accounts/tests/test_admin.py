@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from django.core import mail
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured
-from django.test import TestCase, override_settings
+from django.test import RequestFactory, TestCase, override_settings
 
 from accounts import ratelimit, services
 from accounts.roles import ADMIN_GROUP, MODERATOR_GROUP, ROLE_ADMIN, ROLE_USER
@@ -222,6 +222,29 @@ class LoginTests(TestCase):
         for number in range(20):
             self.attempt(username=f"guess{number}", REMOTE_ADDR="203.0.113.9")
         self.assertEqual(self.attempt(username="another", REMOTE_ADDR="203.0.113.9").status_code, 429)
+
+    @override_settings(CLIENT_IP_HEADER="HTTP_X_REAL_IP")
+    def test_behind_a_proxy_visitors_do_not_share_a_limit(self):
+        for number in range(20):
+            self.attempt(username=f"guess{number}", HTTP_X_REAL_IP="203.0.113.9", REMOTE_ADDR="127.0.0.1")
+        blocked = self.attempt(username="another", HTTP_X_REAL_IP="203.0.113.9", REMOTE_ADDR="127.0.0.1")
+        self.assertEqual(blocked.status_code, 429)
+        other_visitor = self.attempt("pw-for-tests", HTTP_X_REAL_IP="198.51.100.7", REMOTE_ADDR="127.0.0.1")
+        self.assertEqual(other_visitor.status_code, 302)
+
+    @override_settings(CLIENT_IP_HEADER="")
+    def test_without_a_proxy_a_faked_header_does_not_dodge_the_limit(self):
+        for number in range(20):
+            self.attempt(username=f"guess{number}", HTTP_X_REAL_IP=f"203.0.113.{number}", REMOTE_ADDR="192.0.2.1")
+        blocked = self.attempt(username="another", HTTP_X_REAL_IP="198.51.100.7", REMOTE_ADDR="192.0.2.1")
+        self.assertEqual(blocked.status_code, 429)
+
+    @override_settings(CLIENT_IP_HEADER="HTTP_X_REAL_IP")
+    def test_client_address_falls_back_when_the_header_is_missing_or_blank(self):
+        factory = RequestFactory()
+        self.assertEqual(ratelimit.client_ip(factory.get("/", REMOTE_ADDR="192.0.2.1")), "192.0.2.1")
+        blank = factory.get("/", REMOTE_ADDR="192.0.2.1", HTTP_X_REAL_IP="  ")
+        self.assertEqual(ratelimit.client_ip(blank), "192.0.2.1")
 
     def test_success_clears_the_account_count(self):
         for _ in range(4):

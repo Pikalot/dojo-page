@@ -150,11 +150,18 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SAMESITE = "Lax"
 
+# Where rate limits read the visitor's address. Empty means REMOTE_ADDR.
+CLIENT_IP_HEADER = ""
+
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
     # The HTTPS proxy in front of Django must set this header and strip any
     # copy sent by the client; otherwise visitors could claim to be on HTTPS.
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    # Behind a proxy, REMOTE_ADDR is the proxy, so every visitor would share one
+    # rate limit. The proxy must overwrite this header with the real address, and
+    # Django must not be reachable except through it, or visitors could fake it.
+    CLIENT_IP_HEADER = "HTTP_X_REAL_IP"
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_HSTS_SECONDS = 31536000

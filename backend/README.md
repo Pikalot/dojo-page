@@ -170,14 +170,24 @@ A failure message names the test and the expected and actual values. Tests that 
 
 ## Deployment
 
-Runtime: Python 3.12+, MySQL 8.4+, a WSGI server (for example gunicorn, pointing at `config.wsgi`), and a web server handling HTTPS.
+Runtime: Python 3.12+, MySQL 8.4+, Gunicorn, and a web server such as Nginx handling HTTPS.
+
+Start Gunicorn from `backend/` with `gunicorn config.wsgi`. It reads `gunicorn.conf.py`: one process with four threads, listening only on `127.0.0.1:8000`. Don't use `runserver` in production.
 
 - Set everything in `.env.example` as real environment variables, with `DJANGO_DEBUG=false`.
-- The HTTPS proxy must set `X-Forwarded-Proto`, strip any client-supplied copy, and pass the real client address as `REMOTE_ADDR`. Otherwise redirects and rate limits won't work correctly.
+- The HTTPS proxy must overwrite `X-Forwarded-Proto` and `X-Real-IP` on every request, so a visitor's own copies never reach Django. With `DJANGO_DEBUG=false`, rate limits trust `X-Real-IP`, so Gunicorn must not be reachable except through the proxy. In Nginx:
+
+  ```nginx
+  proxy_set_header Host $host;
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_set_header X-Real-IP $remote_addr;
+  ```
+
+  If another proxy, such as a CDN, sits in front of Nginx, `$remote_addr` is that proxy, so visitors would share a rate limit until Nginx is set up to read their real address.
 - Run `python manage.py check --deploy`, `migrate` and `collectstatic`, and serve `staticfiles/` from the web server.
 - Route `/api/` and `/admin/` to Django, and everything else to the built frontend.
 - Allow `frame-src https://www.google.com` if you add a Content-Security-Policy, for the map.
-- Configure a shared cache such as Redis if running more than one server process. The default cache is per process, so each would count rate limits separately.
+- Configure a shared cache such as Redis before raising `workers` in `gunicorn.conf.py`. The default cache is per process, so each would count rate limits separately. Counts also reset when Gunicorn restarts.
 - HSTS is on for a year including subdomains, so only deploy on a domain where every subdomain has HTTPS.
 
 **Backups and rollback**
