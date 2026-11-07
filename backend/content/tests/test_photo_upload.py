@@ -53,6 +53,20 @@ class PrepareImageTests(TestCase):
     def reopen(self, data):
         return Image.open(io.BytesIO(data))
 
+    def test_phone_jpeg_with_extra_pictures_becomes_a_plain_jpeg(self):
+        output = io.BytesIO()
+        main = Image.new("RGB", (40, 20), (200, 30, 30))
+        main.save(output, format="MPO", save_all=True, append_images=[Image.new("RGB", (40, 20), (0, 0, 200))])
+        self.assertEqual(Image.open(io.BytesIO(output.getvalue())).format, "MPO")  # The case being tested.
+
+        result = self.reopen(prepare_image(as_upload(output.getvalue(), name="phone.jpg")))
+
+        self.assertEqual(result.format, "JPEG")
+        self.assertEqual(result.size, (40, 20))
+        self.assertEqual(getattr(result, "n_frames", 1), 1)
+        red, green, blue = result.getpixel((5, 5))
+        self.assertGreater(red, blue)  # The main picture, not the extra one.
+
     def test_keeps_each_allowed_format(self):
         for image_format, name in [("JPEG", "a.jpg"), ("PNG", "a.png"), ("WEBP", "a.webp")]:
             with self.subTest(image_format=image_format):

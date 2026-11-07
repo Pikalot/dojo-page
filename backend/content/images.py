@@ -38,7 +38,9 @@ def prepare_image(uploaded_file):
         width, height = image.size
         if width * height > settings.PHOTO_UPLOAD_MAX_PIXELS:
             raise InvalidImage("This image has too many pixels. Please use a smaller version.")
-        image_format = image.format
+        # Some phones save a JPEG with extra pictures attached, which Pillow reports
+        # as MPO. Only the main picture is kept, as an ordinary JPEG.
+        image_format = "JPEG" if image.format == "MPO" else image.format
         image.load()
     except InvalidImage:
         raise
