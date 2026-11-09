@@ -34,6 +34,8 @@ jobs:
         image: mysql:8.4
         env:
           MYSQL_ROOT_PASSWORD: ci-only-password
+          # makemigrations --check connects to the configured database, so it must exist.
+          MYSQL_DATABASE: Tenshinkai
         ports:
           - 3306:3306
         options: >-
