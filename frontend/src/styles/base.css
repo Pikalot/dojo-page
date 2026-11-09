@@ -191,6 +191,27 @@ select {
   font-style: italic;
 }
 
+.site-footer__staff {
+  --focus-color: var(--color-orange);
+  margin-top: var(--space-2);
+}
+
+.site-footer__staff a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.site-footer__staff a:hover {
+  color: var(--color-orange);
+}
+
+@media print {
+  .site-footer__staff {
+    display: none;
+  }
+}
+
 /* Loading / error message inside a section (see ContentStatus). Inherits the
    section's text color, so it keeps the contrast of its surface. */
 .content-status {

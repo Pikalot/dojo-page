@@ -58,6 +58,8 @@ cd frontend
 VITE_USE_API=true npm run dev
 ```
 
+To show the **Staff sign-in** link in the footer, also set `VITE_ADMIN_URL` to the editor's address, for example `VITE_ADMIN_URL=http://127.0.0.1:8000/admin/` locally. In production, set it in Vercel's environment variables. Without it, there is no link.
+
 Without `VITE_USE_API=true`, the website uses only the mock files and doesn't need the backend at all. New records are drafts until published, so they don't appear on the website before that.
 
 ## Frontend commands

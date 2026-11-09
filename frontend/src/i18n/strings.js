@@ -86,6 +86,7 @@ export const strings = {
     footer: {
       rights: 'All rights reserved.',
       placeholderNotice: '',
+      staffSignIn: 'Staff sign-in',
     },
   },
 
@@ -165,6 +166,7 @@ export const strings = {
     footer: {
       rights: 'Bảo lưu mọi quyền.',
       placeholderNotice: '',
+      staffSignIn: 'Đăng nhập dành cho nhân viên',
     },
   },
 };
