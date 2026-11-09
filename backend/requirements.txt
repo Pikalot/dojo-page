@@ -1,0 +1,7 @@
+Django==6.1.3
+mysqlclient==2.3.0
+python-dotenv==1.2.4
+cloudinary==1.47.0
+Pillow==13.0.0
+certifi==2026.10.23
+gunicorn==26.2.0

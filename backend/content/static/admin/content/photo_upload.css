@@ -1,0 +1,115 @@
+/* Uses the admin's own color variables, so light and dark themes both work. */
+.photo-upload__drop {
+  display: block;
+  padding: 2.5rem 1rem;
+  border: 2px dashed var(--border-color);
+  border-radius: 8px;
+  background: var(--darkened-bg);
+  text-align: center;
+  cursor: pointer;
+}
+
+.photo-upload__drop strong,
+.photo-upload__drop span {
+  display: block;
+  width: 100%;
+  padding: 0;
+  float: none;
+}
+
+.photo-upload__drop span {
+  margin-top: 0.5rem;
+  color: var(--body-quiet-color);
+}
+
+.photo-upload__drop--over,
+.photo-upload__drop:focus-within {
+  border-color: var(--link-fg);
+  outline: 2px solid var(--link-fg);
+  outline-offset: 2px;
+}
+
+/* Still reachable by keyboard and screen readers; the label is what shows. */
+.photo-upload__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.photo-upload__list {
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.photo-upload__card {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: 1rem;
+  margin: 0 0 1rem;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  list-style: none;
+}
+
+.photo-upload__card img {
+  width: 8rem;
+  height: 6rem;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.photo-upload__name {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.photo-upload__card label {
+  display: block;
+  width: auto;
+  padding: 0;
+  float: none;
+  margin-top: 0.5rem;
+  font-weight: 400;
+}
+
+.photo-upload__card input[type='text'] {
+  display: block;
+  width: 100%;
+  max-width: 40rem;
+  box-sizing: border-box;
+}
+
+.photo-upload__message {
+  margin: 0.5rem 0 0;
+}
+
+.photo-upload__message--error {
+  color: var(--error-fg);
+  font-weight: 600;
+}
+
+.photo-upload__options {
+  margin-top: 1rem;
+}
+
+.photo-upload__options label {
+  display: block;
+  width: auto;
+  float: none;
+  padding: 0.25rem 0;
+}
+
+.photo-upload__status {
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .photo-upload__card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

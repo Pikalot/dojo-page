@@ -41,8 +41,13 @@ export function Dojo() {
     viewer.goTo(index, { instant: true });
   };
 
-  // Leave the inline carousel on the photo last seen in the viewer.
-  const syncFromViewer = () => carousel.goTo(viewer.index, { instant: true });
+  // Leave the inline carousel on the photo last seen in the viewer. The browser
+  // returned focus to the photo that opened it, so move focus to this one too;
+  // otherwise Enter would reopen a photo that is no longer showing.
+  const syncFromViewer = () => {
+    carousel.goTo(viewer.index, { instant: true });
+    trackRef.current?.querySelectorAll('.carousel__open')[viewer.index]?.focus({ preventScroll: true });
+  };
 
   const onViewerKeyDown = (event) => {
     if (event.key === 'ArrowLeft') step(viewer, -1);

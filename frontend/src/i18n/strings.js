@@ -29,9 +29,9 @@ export const strings = {
       language: 'Language',
     },
     search: {
-      label: 'Jump to a section',
-      placeholder: 'Search sections…',
-      noResults: 'No matching sections',
+      label: 'Search sections and instructors',
+      placeholder: 'Search sections or names…',
+      noResults: 'No matches',
       resultsCount: (n) => (n === 1 ? '1 result available.' : `${n} results available.`),
     },
     hero: {
@@ -86,6 +86,7 @@ export const strings = {
     footer: {
       rights: 'All rights reserved.',
       placeholderNotice: '',
+      staffSignIn: 'Staff sign-in',
     },
   },
 
@@ -97,7 +98,7 @@ export const strings = {
       label: 'Chính',
       home: 'Trang chủ Aikido Tenshinkai',
       about: 'Giới thiệu',
-      announcements: 'Tin tức & Sự kiện',
+      announcements: 'Tin tức',
       schedule: 'Lịch tập',
       instructors: 'Huấn luyện viên',
       contact: 'Liên hệ',
@@ -108,9 +109,9 @@ export const strings = {
       language: 'Ngôn ngữ',
     },
     search: {
-      label: 'Chuyển đến mục',
-      placeholder: 'Tìm mục…',
-      noResults: 'Không tìm thấy mục phù hợp',
+      label: 'Tìm mục và huấn luyện viên',
+      placeholder: 'Tìm mục hoặc tên…',
+      noResults: 'Không tìm thấy kết quả',
       resultsCount: (n) => `Có ${n} kết quả.`,
     },
     hero: {
@@ -165,6 +166,7 @@ export const strings = {
     footer: {
       rights: 'Bảo lưu mọi quyền.',
       placeholderNotice: '',
+      staffSignIn: 'Đăng nhập dành cho nhân viên',
     },
   },
 };

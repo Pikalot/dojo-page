@@ -10,4 +10,15 @@ describe('localize', () => {
   it('falls back to English when a translation is missing', () => {
     expect(localize({ en: 'Hi', vi: undefined }, 'vi')).toBe('Hi');
   });
+
+  it('falls back in both directions, including for empty text', () => {
+    expect(localize({ en: 'Hi', vi: '' }, 'vi')).toBe('Hi');
+    expect(localize({ en: '', vi: 'Chào' }, 'en')).toBe('Chào');
+    expect(localize({ en: null, vi: 'Chào' }, 'en')).toBe('Chào');
+  });
+
+  it('gives empty text when neither language exists', () => {
+    expect(localize({ en: '', vi: '' }, 'vi')).toBe('');
+    expect(localize({ en: null, vi: null }, 'en')).toBe('');
+  });
 });

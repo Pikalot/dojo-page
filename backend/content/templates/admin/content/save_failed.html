@@ -1,0 +1,49 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+{% if reason == "conflict" and deleting %}
+  <p class="errornote">Someone changed this record while you were deciding to delete it, so it was not deleted.</p>
+  <p>Look at the latest version first, then delete it if you still want to.</p>
+  <p><a class="button" href="{{ change_url }}">See the latest version</a> <a class="button" href="{{ delete_url }}">Delete the latest version</a></p>
+
+{% elif reason == "conflict" %}
+  <p class="errornote">Someone else saved this record while you were editing it, so your changes were not saved. Nothing has been overwritten.</p>
+  <div class="results">
+    <table style="width: 100%">
+      <thead><tr><th scope="col">Field</th><th scope="col">Your version</th><th scope="col">Now in the database</th></tr></thead>
+      <tbody>
+        {% for row in rows %}
+          <tr{% if row.differs %} style="font-weight: bold"{% endif %}>
+            <th scope="row">{{ row.label }}{% if row.differs %} (different){% endif %}</th>
+            <td style="white-space: pre-wrap">{{ row.mine }}</td>
+            <td style="white-space: pre-wrap">{{ row.theirs }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <h2 style="margin-top: 1.5rem">What would you like to do?</h2>
+  <p><a class="button" href="{{ change_url }}">Discard mine and load the latest version</a></p>
+  <form method="post" action="{{ change_url }}">{% csrf_token %}
+    {% for key, value in repost %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endfor %}
+    <input type="hidden" name="expected_version" value="{{ current_version }}">
+    <input type="submit" value="Replace the latest version with mine">
+  </form>
+  <p class="help">This replaces the other person's changes with everything in "Your version". If someone saves again first, you'll be asked again.</p>
+
+{% elif reason == "gone" %}
+  <p class="errornote">This record was deleted by someone else, so your changes were not saved.</p>
+  <p><a class="button" href="{{ list_url }}">Back to the list</a></p>
+
+{% elif reason == "constraint" %}
+  <p class="errornote">The database refused this change because it clashes with other data. Someone may have just saved the same thing, such as the same class slot. Nothing was saved.</p>
+  <p><a class="button" href="{% if change_url %}{{ change_url }}{% else %}{{ list_url }}{% endif %}">Go back</a></p>
+
+{% elif reason == "busy" %}
+  <p class="errornote">The database was busy, so nothing was saved. Go back and try again.</p>
+  <p><a class="button" href="{% if change_url %}{{ change_url }}{% else %}{{ list_url }}{% endif %}">Go back</a></p>
+
+{% else %}
+  <p class="errornote">This page is out of date or incomplete, so nothing was changed. Reload it and try again.</p>
+  <p><a class="button" href="{% if change_url %}{{ change_url }}{% else %}{{ list_url }}{% endif %}">Reload</a></p>
+{% endif %}
+{% endblock %}

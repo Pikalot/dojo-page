@@ -26,8 +26,9 @@
   }
 }
 
-/* Skip the effect for visitors who ask for less motion. */
-@media (prefers-reduced-motion: reduce) {
+/* Skip the effect for visitors who ask for less motion, and on paper, where
+   anything not yet scrolled into view would otherwise print blank. */
+@media (prefers-reduced-motion: reduce), print {
   .reveal {
     opacity: 1;
   }

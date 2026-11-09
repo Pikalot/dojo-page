@@ -1,11 +1,11 @@
-import { getSubcontent, getLocation } from '../api/content.js';
+import { getSubcontent } from '../api/content.js';
 import { useContent } from '../hooks/useContent.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
 import { toParagraphs } from '../lib/text.js';
 import { ContentStatus } from './ContentStatus.jsx';
 import './About.css';
 
-// Location is folded into About (per wireframe review); the map lives in Contact.
+// The federation text below the dojo photos, inside the About section.
 export function SubAbout() {
   const { t } = useLanguage();
   const content = useContent(getSubcontent);

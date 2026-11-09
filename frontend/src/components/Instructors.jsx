@@ -2,12 +2,15 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { getInstructors } from '../api/content.js';
 import { useContent } from '../hooks/useContent.js';
 import { useLanguage } from '../i18n/LanguageContext.jsx';
+import { onBlackBeltHighlightRequest, onInstructorProfileRequest } from '../lib/instructorProfile.js';
 import { toParagraphs } from '../lib/text.js';
 import { ContentStatus } from './ContentStatus.jsx';
 import './Instructors.css';
 import { useTilt } from '../hooks/useTilt.js';
 import { useInView } from '../hooks/useInView.js';
 import tenshinkaiLogo from '../assets/tenshinkai-logo.svg';
+
+const HIGHLIGHT_MS = 3000;
 
 /**
  * Horizontally scrolling row of instructor cards. Works with touch swipe,
@@ -28,6 +31,25 @@ export function Instructors() {
   const [profileId, setProfileId] = useState(null);
   // Looked up by id, so the open profile follows a language switch.
   const profile = instructors?.find((person) => person.id === profileId);
+
+  // The search box asks for a profile from outside this component.
+  useEffect(() => onInstructorProfileRequest(setProfileId), []);
+
+  // An object, so choosing the same person again counts as a new request.
+  const [highlight, setHighlight] = useState(null);
+  useEffect(() => onBlackBeltHighlightRequest((id) => setHighlight({ id })), []);
+  const blackBeltsReady = blackBelts?.length > 0;
+
+  // Waits for the list if a request arrives while it is still loading.
+  useEffect(() => {
+    if (!highlight || !blackBeltsReady) return undefined;
+    const name = document.getElementById(`black-belt-${highlight.id}`);
+    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    name?.scrollIntoView?.({ block: 'center', behavior: reduceMotion ? 'instant' : 'smooth' });
+    name?.focus({ preventScroll: true });
+    const timer = setTimeout(() => setHighlight(null), HIGHLIGHT_MS);
+    return () => clearTimeout(timer);
+  }, [highlight, blackBeltsReady]);
 
   // Open the modal once its content has rendered; the browser handles
   // centering, the backdrop, Esc, and returning focus to the card on close.
@@ -149,7 +171,7 @@ export function Instructors() {
         </ul>
       </div>
 
-      {blackBelts?.length > 0 && <BlackBelts groups={blackBelts} />}
+      {blackBeltsReady && <BlackBelts groups={blackBelts} highlightId={highlight?.id} />}
 
       <dialog
         ref={dialogRef}
@@ -193,7 +215,7 @@ export function Instructors() {
  * Every black belt who is not on a card, already grouped by rank and in
  * order by the API.
  */
-function BlackBelts({ groups }) {
+function BlackBelts({ groups, highlightId }) {
   const { t } = useLanguage();
   const billboardRef = useRef(null);
   useTilt(billboardRef);
@@ -203,7 +225,7 @@ function BlackBelts({ groups }) {
   const groupsInView = useInView(billboardRef, 0.1);
 
   return (
-    <div className="black-belts container">
+    <div id="black-belts" className="black-belts container">
       {/* Decorative: the throw plays as a quick strike each time it scrolls into view. */}
       <div
         ref={separatorRef}
@@ -213,7 +235,10 @@ function BlackBelts({ groups }) {
       >
         <span className="black-belts__art" />
       </div>
-      <h2 className="black-belts__title">{t.instructors.blackBelts}</h2>
+      {/* Focusable, because the search box moves focus here when it jumps. */}
+      <h2 className="black-belts__title" tabIndex={-1}>
+        {t.instructors.blackBelts}
+      </h2>
       <div className="black-belts__groups billboard" ref={billboardRef}>
         {/* Same pop-up as the panels above, one box after another. */}
         {groups.map(({ rank, members }, i) => (
@@ -226,7 +251,10 @@ function BlackBelts({ groups }) {
             <h3 className="black-belts__rank">{rank}</h3>
             <ul className="black-belts__names">
               {members.map(({ id, name }) => (
-                <li key={id}>{name}</li>
+                // Focusable, so a screen reader lands on the name the search chose.
+                <li key={id} id={`black-belt-${id}`} tabIndex={-1} data-highlighted={id === highlightId || undefined}>
+                  {name}
+                </li>
               ))}
             </ul>
           </div>

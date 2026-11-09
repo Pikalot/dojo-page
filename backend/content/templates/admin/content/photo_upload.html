@@ -1,0 +1,40 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'admin/content/photo_upload.css' %}">{% endblock %}
+{% block breadcrumbs %}
+<ol class="breadcrumbs">
+  <li><a href="{% url 'admin:index' %}">Home</a></li>
+  <li><a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a></li>
+  <li><a href="{% url 'admin:content_photo_changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a></li>
+  <li aria-current="page">Upload photos</li>
+</ol>
+{% endblock %}
+{% block content %}
+{% if not configured %}
+  <p class="errornote">Photo upload isn't set up yet. Add the Cloudinary settings to the server's environment, then restart it.</p>
+{% else %}
+<form id="photo-upload" class="photo-upload" method="post" data-max-bytes="{{ max_bytes }}" data-max-mb="{{ max_mb }}" novalidate>
+  {% csrf_token %}
+  <label class="photo-upload__drop" id="photo-drop">
+    <input type="file" id="photo-files" class="photo-upload__input" accept="image/jpeg,image/png,image/webp" multiple>
+    <strong>Drop photos here, or click to choose</strong>
+    <span>JPEG, PNG or WebP, up to {{ max_mb }} MB each. Locations and other hidden data are removed before upload.</span>
+  </label>
+
+  <ul id="photo-list" class="photo-upload__list"></ul>
+
+  <div id="photo-options" class="photo-upload__options" hidden>
+    {% if can_add_to_carousel %}
+      <label><input type="checkbox" id="photo-carousel"> Add to the About carousel</label>
+    {% endif %}
+    {% if can_publish %}
+      <label><input type="checkbox" id="photo-publish"> Publish right away (otherwise saved as drafts)</label>
+    {% endif %}
+    <p><button type="submit" id="photo-submit" class="button default">Upload</button></p>
+  </div>
+  <p id="photo-status" class="photo-upload__status" role="status" aria-live="polite"></p>
+</form>
+<script src="{% static 'admin/content/translate.js' %}" defer></script>
+<script src="{% static 'admin/content/photo_upload.js' %}" defer></script>
+{% endif %}
+{% endblock %}

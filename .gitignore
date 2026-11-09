@@ -15,6 +15,9 @@ db.sqlite3
 # Uploaded photos
 media/
 
+# Django collectstatic output
+backend/staticfiles/
+
 # Documents
 REQUIREMENTS.md
 

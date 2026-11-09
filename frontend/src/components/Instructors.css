@@ -293,6 +293,7 @@ body:has(.instructor-modal[open]) {
 /* Black belts who are not on a card: names grouped by rank. */
 .black-belts {
   margin-top: var(--space-6);
+  scroll-margin-top: var(--header-height);   /* Lands below the fixed header. */
 }
 
 /* Throw silhouette between the cards and the list. The PNG is used as a mask,
@@ -420,4 +421,20 @@ body:has(.instructor-modal[open]) {
 .black-belts__names li {
   break-inside: avoid;
   padding-block: var(--space-1);
+  border-radius: var(--radius-sm);
+  transition: background 400ms ease, box-shadow 400ms ease;
+}
+
+/* The name chosen in the search box. The shadow widens the color without moving
+   the text. */
+.black-belts__names li[data-highlighted] {
+  background: var(--color-orange);
+  box-shadow: 0 0 0 var(--space-1) var(--color-orange);
+  color: var(--color-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .black-belts__names li {
+    transition: none;
+  }
 }
