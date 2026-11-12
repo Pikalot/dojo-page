@@ -29,12 +29,13 @@ frontend/          React app (Vite)
 ## How it works
 
 ```
-Visitor -> React site -> /api/... (read-only) -> Django -> MySQL
-Staff   -> /admin/ (sign-in required)         -> Django -> MySQL
+Visitor -> Vercel (React site) -> /api/... (read-only) -> server: Caddy -> Gunicorn -> Django -> MySQL
+Staff   -> "Staff sign-in" link -> server's /admin/ (sign-in required) -> same as above
 ```
 
 - Visitors read the React site. It only ever reads published content, through the API.
 - Staff edit content in the Django admin. Saves are checked against the version they loaded, so nobody silently overwrites someone else's work.
+- Photos are stored on Cloudinary. Translations come from Azure Translator. The server holds every key; the website holds none.
 - The About text, federation text, contact details and location have no database tables yet, so they still come from `frontend/src/data/mock/`.
 
 ## Running the whole app
@@ -61,6 +62,41 @@ VITE_USE_API=true npm run dev
 To show the **Staff sign-in** link in the footer, also set `VITE_ADMIN_URL` to the editor's address, for example `VITE_ADMIN_URL=http://127.0.0.1:8000/admin/` locally. In production, set it in Vercel's environment variables. Without it, there is no link.
 
 Without `VITE_USE_API=true`, the website uses only the mock files and doesn't need the backend at all. New records are drafts until published, so they don't appear on the website before that.
+
+## Deploying
+
+| Part | Hosted on | Address |
+|---|---|---|
+| Website | Vercel | `https://tenshinkaisj.vercel.app` |
+| Backend and editor | Google Cloud VM | `https://tenshinkaisj.duckdns.org/admin/` |
+
+Both deploy from `main`.
+
+### Backend
+
+Set up once by following [Deployment in backend/README.md](backend/README.md#deployment). It covers the VM, MySQL, the settings file, Gunicorn, Caddy and HTTPS, and how to release updates.
+
+### Website (Vercel)
+
+1. In the Vercel project's **Settings > Build and Deployment**: Framework Preset **Vite**, Root Directory **`frontend`**, no command overrides.
+2. In **Settings > Git**: Production Branch **`main`**.
+3. In **Settings > Environments > Production**, add these as **Config** variables (not Secret):
+
+   | Key | Value |
+   |---|---|
+   | `VITE_USE_API` | `true` |
+   | `VITE_ADMIN_URL` | `https://tenshinkaisj.duckdns.org/admin/` |
+
+   Anything starting with `VITE_` is built into the website, where anyone can read it. Never put a password or key in one.
+4. `frontend/vercel.json` forwards `/api/...` to the backend. Change its address if the backend moves.
+
+Vercel deploys automatically when `main` changes under `frontend/`. Vite reads the variables at build time, so after changing them, use **Deployments > ⋯ > Redeploy**.
+
+### Releasing a change
+
+1. Work on a branch, and open a pull request into `main`. CI runs the frontend and backend tests.
+2. Merge. Vercel redeploys the website by itself.
+3. If `backend/` changed, release it on the server ([steps](backend/README.md#releasing-an-update)). If the change spans both, keep the API backward compatible and release the backend first.
 
 ## Frontend commands
 

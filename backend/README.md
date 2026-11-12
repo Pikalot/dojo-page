@@ -170,29 +170,268 @@ A failure message names the test and the expected and actual values. Tests that 
 
 ## Deployment
 
-Runtime: Python 3.12+, MySQL 8.4+, Gunicorn, and a web server such as Nginx handling HTTPS.
+The live backend runs on one small Google Cloud VM. The React site stays on Vercel. The root [README](../README.md#deploying) explains how the two connect.
 
-Start Gunicorn from `backend/` with `gunicorn config.wsgi`. It reads `gunicorn.conf.py`: one process with four threads, listening only on `127.0.0.1:8000`. Don't use `runserver` in production.
+| Part | Where | Job |
+|---|---|---|
+| Caddy | VM, ports 80 and 443 | HTTPS with a free certificate it renews itself, serves `staticfiles/`, passes everything else to Gunicorn |
+| Gunicorn | VM, `127.0.0.1:8000` only | Runs Django. One process with four threads, from `gunicorn.conf.py`. Kept running by systemd. |
+| MySQL 8.4 | VM, `127.0.0.1` only | The `Tenshinkai` database |
+| Cloudinary, Azure Translator, Gmail | Outside services | Photos, translation, password reset email |
 
-- Set everything in `.env.example` as real environment variables, with `DJANGO_DEBUG=false`.
-- The HTTPS proxy must overwrite `X-Forwarded-Proto` and `X-Real-IP` on every request, so a visitor's own copies never reach Django. With `DJANGO_DEBUG=false`, rate limits trust `X-Real-IP`, so Gunicorn must not be reachable except through the proxy. In Nginx:
+Don't use `runserver` in production.
 
-  ```nginx
-  proxy_set_header Host $host;
-  proxy_set_header X-Forwarded-Proto $scheme;
-  proxy_set_header X-Real-IP $remote_addr;
-  ```
+The steps below are what the live server was built with. Commands run in the VM's SSH window unless they say otherwise.
 
-  If another proxy, such as a CDN, sits in front of Nginx, `$remote_addr` is that proxy, so visitors would share a rate limit until Nginx is set up to read their real address.
-- Run `python manage.py check --deploy`, `migrate` and `collectstatic`, and serve `staticfiles/` from the web server.
-- Route `/api/` and `/admin/` to Django, and everything else to the built frontend.
-- Allow `frame-src https://www.google.com` if you add a Content-Security-Policy, for the map.
-- Configure a shared cache such as Redis before raising `workers` in `gunicorn.conf.py`. The default cache is per process, so each would count rate limits separately. Counts also reset when Gunicorn restarts.
-- HSTS is on for a year including subdomains, so only deploy on a domain where every subdomain has HTTPS.
+### 1. Create the VM
 
-**Backups and rollback**
+In Google Cloud, go to **Compute Engine > VM instances > Create instance**. These settings stay within the free tier:
 
-- Take regular `mysqldump --single-transaction` backups, and test restoring one.
-- To roll back, deploy the previous release. If a migration has to be undone, restore from a backup taken before it, because undoing a migration can lose data.
+| Setting | Value |
+|---|---|
+| Region | `us-west1`, `us-central1` or `us-east1` |
+| Machine type | `e2-micro` (1 GB memory) |
+| Boot disk | Ubuntu 26.04 LTS, x86/64, **standard persistent disk**, 30 GB |
+| Data protection | No backups (snapshots cost money) |
+| Firewall | Allow HTTP and HTTPS traffic |
 
-**Logs:** application events go to the `dojo` logger on the console. Admin changes are recorded in the admin's history. Error monitoring isn't set up yet.
+Set a $1 budget alert under **Billing > Budgets & alerts**. The cost estimate on the create page doesn't subtract the free tier.
+
+Ubuntu 26.04 matters: its own MySQL is 8.4, which Django 6.1 requires. Ubuntu 24.04 ships MySQL 8.0.
+
+### 2. Prepare the server
+
+Add 2 GB of swap, so MySQL isn't stopped when the 1 GB of memory runs out:
+
+```sh
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+```
+
+Install the software:
+
+```sh
+sudo apt update
+sudo apt install -y mysql-server python3-venv python3-dev build-essential pkg-config libmysqlclient-dev git nano caddy
+```
+
+Make MySQL small and private:
+
+```sh
+sudo tee /etc/mysql/mysql.conf.d/zz-dojo.cnf > /dev/null <<'EOF'
+[mysqld]
+bind-address = 127.0.0.1
+mysqlx = OFF
+performance_schema = OFF
+max_connections = 30
+innodb_buffer_pool_size = 128M
+EOF
+sudo systemctl restart mysql
+```
+
+### 3. Database, users and settings
+
+Create the database and a MySQL user that can only reach it. In `sudo mysql`, using your own password without `'`, `"`, `\`, `$` or backticks:
+
+```sql
+CREATE DATABASE Tenshinkai CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'dojo'@'localhost' IDENTIFIED BY 'your-password-here';
+GRANT ALL PRIVILEGES ON Tenshinkai.* TO 'dojo'@'localhost';
+```
+
+Create a `dojo` system user that runs the app and can't log in, and a settings file only it and root can read:
+
+```sh
+sudo useradd --system --create-home --home-dir /srv/dojo --shell /usr/sbin/nologin dojo
+sudo install -d -m 750 -o root -g dojo /etc/dojo
+sudo install -m 640 -o root -g dojo /dev/null /etc/dojo/env
+python3 -c "import secrets; print('DJANGO_SECRET_KEY=' + secrets.token_urlsafe(50))" | sudo tee -a /etc/dojo/env > /dev/null
+sudo nano /etc/dojo/env
+```
+
+`/etc/dojo/env` is the server's version of `.env`. Add these below the secret key line:
+
+```
+DJANGO_DEBUG=false
+DJANGO_ALLOWED_HOSTS=tenshinkaisj.duckdns.org,localhost
+DJANGO_CSRF_TRUSTED_ORIGINS=https://tenshinkaisj.duckdns.org
+DB_NAME=Tenshinkai
+DB_USER=dojo
+DB_PASSWORD=your-password-here
+DB_HOST=localhost
+DB_PORT=3306
+CLOUDINARY_CLOUD_NAME=...
+CLOUDINARY_API_KEY=...
+CLOUDINARY_API_SECRET=...
+AZURE_TRANSLATOR_KEY=...
+AZURE_TRANSLATOR_REGION=...
+EMAIL_HOST=...
+EMAIL_PORT=...
+EMAIL_HOST_USER=...
+EMAIL_HOST_PASSWORD=...
+DEFAULT_FROM_EMAIL="Tenshinkai Aikido <address@example.com>"
+```
+
+- Use a new `DJANGO_SECRET_KEY` on the server, never the one from a laptop. Changing it signs everyone out.
+- Don't paste secrets into chats or screenshots. If one was ever shared, replace it before using it here.
+- If `nano` shows `[Mac Format]` when saving, press **Esc** then **M** to turn it off, or every setting ends up on one line. `sudo grep -c $'\r' /etc/dojo/env` should print `0`.
+- `sudo cut -d= -f1 /etc/dojo/env` lists the setting names without their values.
+- The Cloudinary key needs permission to upload and delete. A "Media Library User" key is refused with `NotAllowed`.
+
+### 4. Code and Python packages
+
+```sh
+sudo -u dojo git clone https://github.com/Pikalot/dojo-page.git /srv/dojo/app
+sudo -u dojo python3 -m venv /srv/dojo/venv
+sudo -u dojo /srv/dojo/venv/bin/pip install -r /srv/dojo/app/backend/requirements.txt
+```
+
+The server follows `main`.
+
+### 5. Tables, admin account and content
+
+A small `dojo-manage` command loads `/etc/dojo/env` and runs `manage.py`:
+
+```sh
+sudo tee /usr/local/bin/dojo-manage > /dev/null <<'EOF'
+#!/bin/sh
+set -a; . /etc/dojo/env; set +a
+cd /srv/dojo/app/backend
+exec /srv/dojo/venv/bin/python manage.py "$@"
+EOF
+sudo chmod 755 /usr/local/bin/dojo-manage
+```
+
+`sudo -u dojo dojo-manage <command>` on the server works like `python manage.py <command>` locally.
+
+```sh
+sudo -u dojo dojo-manage migrate
+sudo -u dojo dojo-manage createsuperuser
+sudo -u dojo dojo-manage collectstatic --noinput
+```
+
+To load the starting content, upload the private `dbqueries/populatedb.sql` (the SSH window's **UPLOAD FILE** button), then run it. It must run after `createsuperuser`, because it records user 1 as the author. It only adds records.
+
+```sh
+sudo mysql --default-character-set=utf8mb4 < ~/populatedb.sql
+```
+
+Never run `createdb.sql` or `dropdb.sql` on the server. Migrations create the tables.
+
+### 6. Keep it running
+
+```sh
+sudo tee /etc/systemd/system/dojo.service > /dev/null <<'EOF'
+[Unit]
+Description=Tenshinkai backend (Gunicorn)
+After=network.target mysql.service
+Requires=mysql.service
+
+[Service]
+User=dojo
+Group=dojo
+WorkingDirectory=/srv/dojo/app/backend
+EnvironmentFile=/etc/dojo/env
+ExecStart=/srv/dojo/venv/bin/gunicorn config.wsgi
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+sudo systemctl daemon-reload
+sudo systemctl enable --now dojo
+curl -s -o /dev/null -w "%{http_code}\n" -H "X-Forwarded-Proto: https" http://localhost:8000/api/faq
+```
+
+The last line should print `200`. systemd starts Gunicorn at boot and restarts it if it crashes.
+
+### 7. Name and HTTPS
+
+1. At [duckdns.org](https://www.duckdns.org), create a name and set it to the VM's external IP. The live site uses `tenshinkaisj.duckdns.org`. Keep the DuckDNS token private.
+2. Configure Caddy. It gets and renews the certificate itself:
+
+```sh
+sudo tee /etc/caddy/Caddyfile > /dev/null <<'EOF'
+tenshinkaisj.duckdns.org {
+	encode gzip
+
+	request_body {
+		max_size 12MB
+	}
+
+	handle_path /static/* {
+		root * /srv/dojo/app/backend/staticfiles
+		file_server
+	}
+
+	handle {
+		reverse_proxy 127.0.0.1:8000 {
+			header_up X-Real-IP {remote_host}
+		}
+	}
+}
+EOF
+sudo caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+sudo systemctl restart caddy
+```
+
+The editor is then at `https://tenshinkaisj.duckdns.org/admin/`.
+
+`header_up X-Real-IP {remote_host}` always replaces whatever a visitor sends, so login limits see real addresses. Gunicorn only listens on `127.0.0.1`, so nobody can skip Caddy. Staff go straight to this address (the website's **Staff sign-in** link points here), not through Vercel.
+
+### Releasing an update
+
+After merging into `main`:
+
+```sh
+sudo -u dojo git -C /srv/dojo/app pull
+sudo -u dojo /srv/dojo/venv/bin/pip install -r /srv/dojo/app/backend/requirements.txt
+sudo -u dojo dojo-manage migrate
+sudo -u dojo dojo-manage collectstatic --noinput
+sudo systemctl restart dojo
+```
+
+Take a backup before any release with a migration. If a change touches both the API and the website, keep the API change backward compatible, and deploy the backend first.
+
+### Everyday commands
+
+| Task | Command |
+|---|---|
+| Is it running? | `systemctl status dojo caddy mysql --no-pager` |
+| Backend logs | `sudo journalctl -u dojo -n 100 --no-pager` |
+| Caddy logs | `sudo journalctl -u caddy -n 100 --no-pager` |
+| Restart after changing `/etc/dojo/env` | `sudo systemctl restart dojo` |
+| Change an admin password | `sudo -u dojo dojo-manage changepassword <username>` |
+| Memory and swap | `free -h` |
+
+If `sudo` replies "I'm afraid I can't do that" in the browser SSH window, close the window and open a new one.
+
+### Backups and rollback
+
+Backups aren't automated yet. To take one and download it with **DOWNLOAD FILE**:
+
+```sh
+sudo mysqldump --single-transaction --routines --triggers Tenshinkai | gzip > ~/tenshinkai-$(date +%F).sql.gz
+```
+
+To restore one, which replaces the current data:
+
+```sh
+gunzip -c ~/tenshinkai-YYYY-MM-DD.sql.gz | sudo mysql Tenshinkai
+```
+
+- Test restoring a backup now and then.
+- To roll back code, check out the previous commit in `/srv/dojo/app` and restart. If a migration has to be undone, restore a backup taken before it, because undoing a migration can lose data.
+
+### Notes and limitations
+
+- **The external IP can change** if the VM is stopped and started. Update it on DuckDNS when that happens. Automatic updates aren't set up yet.
+- **Rate limits are counted per Gunicorn process** in memory. Configure a shared cache such as Redis before raising `workers` in `gunicorn.conf.py`. Counts also reset on restart.
+- **HSTS** is on for a year including subdomains, so only serve this backend from a name where every subdomain has HTTPS.
+- **If you add a Content-Security-Policy**, allow `frame-src https://www.google.com` for the map.
+- **If the server ever sits behind another proxy**, it must still set `X-Real-IP` to the visitor's address and `X-Forwarded-Proto`, and strip copies sent by visitors.
+- **Logs:** application events go to the `dojo` logger, which systemd keeps in the journal. Admin changes are recorded in the admin's history. Error monitoring isn't set up yet.
