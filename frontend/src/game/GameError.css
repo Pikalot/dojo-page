@@ -1,0 +1,19 @@
+.game-error {
+  display: grid;
+  place-content: center;
+  gap: var(--space-4);
+  min-height: 100dvh;
+  padding: var(--gutter);
+  text-align: center;
+}
+
+.game-error__title {
+  font-size: var(--text-2xl);
+}
+
+.game-error__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+}

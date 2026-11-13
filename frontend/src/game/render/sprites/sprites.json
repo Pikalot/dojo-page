@@ -1,0 +1,84 @@
+{
+  "frameWidth": 80,
+  "frameHeight": 78,
+  "originX": 36,
+  "originY": 74,
+  "unitsPerPixel": 3,
+  "characters": {
+    "male": {
+      "image": "male.png",
+      "frames": [
+        "stand",
+        "walk1",
+        "walk2",
+        "bow",
+        "strike",
+        "block",
+        "grab",
+        "lead",
+        "turn",
+        "follow",
+        "stumble",
+        "hit"
+      ]
+    },
+    "female": {
+      "image": "female.png",
+      "frames": [
+        "stand",
+        "walk1",
+        "walk2",
+        "bow",
+        "strike",
+        "block",
+        "grab",
+        "lead",
+        "turn",
+        "follow",
+        "stumble",
+        "hit"
+      ]
+    },
+    "walker": {
+      "image": "walker.png",
+      "frames": [
+        "stand",
+        "walk1",
+        "walk2",
+        "windup",
+        "punch",
+        "pushed",
+        "caught",
+        "air1",
+        "air2",
+        "air3",
+        "air4",
+        "lying"
+      ]
+    },
+    "dasher": {
+      "image": "dasher.png",
+      "frames": [
+        "stand",
+        "walk1",
+        "walk2",
+        "windup",
+        "punch",
+        "pushed",
+        "caught",
+        "air1",
+        "air2",
+        "air3",
+        "air4",
+        "lying",
+        "crouch",
+        "hop",
+        "spinFront",
+        "spinToward",
+        "spinBehind",
+        "spinAway",
+        "lands"
+      ]
+    }
+  }
+}

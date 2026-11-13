@@ -23,7 +23,30 @@ function detectInitialLanguage() {
   return browser.toLowerCase().startsWith('vi') ? 'vi' : DEFAULT_LANGUAGE;
 }
 
-export function LanguageProvider({ children, initialLanguage }) {
+// Merges page-only strings into the shared ones, one level deep per top-level key,
+// so a page (like the game) can add its own text without the home page loading it.
+function mergeStrings(base, extra) {
+  if (!extra) return base;
+  const merged = { ...base };
+  for (const [key, value] of Object.entries(extra)) {
+    merged[key] =
+      value && typeof value === 'object' && base[key] && typeof base[key] === 'object'
+        ? { ...base[key], ...value }
+        : value;
+  }
+  return merged;
+}
+
+function readPath(obj, path) {
+  return path.split('.').reduce((node, key) => (node == null ? undefined : node[key]), obj);
+}
+
+export function LanguageProvider({
+  children,
+  initialLanguage,
+  extraStrings,
+  titleKey = 'meta.title',
+}) {
   const [language, setLanguageState] = useState(() => initialLanguage ?? detectInitialLanguage());
 
   const setLanguage = useCallback((code) => {
@@ -38,15 +61,17 @@ export function LanguageProvider({ children, initialLanguage }) {
 
   // Keep <html lang> and the tab title in sync so screen readers pronounce
   // text correctly and the title matches the visible language.
+  const t = useMemo(
+    () => mergeStrings(strings[language], extraStrings?.[language]),
+    [language, extraStrings],
+  );
+
   useEffect(() => {
     document.documentElement.lang = language;
-    document.title = strings[language].meta.title;
-  }, [language]);
+    document.title = readPath(t, titleKey) ?? strings[language].meta.title;
+  }, [language, t, titleKey]);
 
-  const value = useMemo(
-    () => ({ language, setLanguage, t: strings[language] }),
-    [language, setLanguage],
-  );
+  const value = useMemo(() => ({ language, setLanguage, t }), [language, setLanguage, t]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

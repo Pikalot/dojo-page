@@ -1,0 +1,37 @@
+.results__stats {
+  display: grid;
+  gap: var(--space-2);
+  min-width: min(20rem, 100%);
+}
+
+.results__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid rgb(255 255 255 / 0.2);
+}
+
+.results__row dt {
+  color: var(--color-muted-on-dark);
+}
+
+.results__row dd {
+  font-weight: var(--weight-bold);
+}
+
+.results__row--score dd {
+  font-size: var(--text-xl);
+  color: var(--color-orange);
+}
+
+.results__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+#results-heading:focus {
+  outline: none;
+}
