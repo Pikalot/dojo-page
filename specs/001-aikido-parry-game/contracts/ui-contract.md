@@ -52,7 +52,7 @@ it to where it was.
 
 | Event | Visual | Sound |
 |---|---|---|
-| Enemy winding up | Enemy flashes and a "!" appears above it; with reduced motion, a steady bright outline and "!" instead of flashing | Short rising tone |
+| Enemy winding up | The wind-up pose (fist drawn back) and a "!" above it. No glow: players read the attack's phases to time the grab | Short rising tone |
 | Dasher about to dash | Crouches and leaves a line on the floor showing its path | Low whoosh |
 | Successful parry | Throw animation | Bright chime |
 | Perfect parry (middle half of the window, or strike + parry combo) | Critical throw: enemy flies twice as far, white flash around both characters ("Combo!" for strike + parry; no caption for a perfect parry); with reduced motion, a steady glow instead of the flash | Deeper two-note gong, different from the normal chime |

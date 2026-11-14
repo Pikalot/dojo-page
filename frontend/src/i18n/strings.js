@@ -39,6 +39,7 @@ export const strings = {
       tagline: 'True victory is victory over oneself.',
       primaryCta: 'View schedule',
       secondaryCta: 'Contact us',
+      gameBtn: 'Enter the dojo',
     },
     sections: {
       about: 'Tenshinkai Aikido San Jose',
@@ -119,6 +120,7 @@ export const strings = {
       tagline: 'Hệ phái Aikido dành cho người Việt.',
       primaryCta: 'Xem lịch tập',
       secondaryCta: 'Liên hệ',
+      gameBtn: 'Lên sân'
     },
     sections: {
       about: 'Aikido Tenshinkai San Jose',

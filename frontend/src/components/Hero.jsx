@@ -63,6 +63,9 @@ export function Hero() {
           <SectionLink to="contact" className="button button--ghost">
             {t.hero.secondaryCta}
           </SectionLink>
+          <a href='/game/' className="button button--ghost">
+            {t.hero.gameBtn}
+          </a>
         </div>
       </div>
 

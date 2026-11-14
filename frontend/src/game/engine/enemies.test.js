@@ -251,6 +251,14 @@ describe('throws and knock-downs', () => {
     expect(session.enemies).toHaveLength(0);
   });
 
+  it('a thrown enemy comes down on the floor at the height of the player\'s feet', () => {
+    const session = arena([{ x: 460, y: 415 }]);
+    throwEnemy(session, first(session), { perfect: false });
+    run(session, TUNING.enemy.thrownFlightMs + STEP_MS);
+    expect(first(session).action).toBe('defeated');
+    expect(first(session).y).toBe(session.player.y);
+  });
+
   it('a critical throw lands 70 to 140 units from the player on the far side (3 to 6 feet)', () => {
     for (let seed = 1; seed <= 20; seed += 1) {
       const session = arena([{ x: 460 }]);

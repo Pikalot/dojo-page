@@ -226,6 +226,12 @@ def draw(look, pose):
         img = img.rotate(pose['spin'], resample=Image.NEAREST, center=(ORIGIN[0], ORIGIN[1] - 18))
         if pose.get('drop'):
             img = img.transform(img.size, Image.AFFINE, (1, 0, 0, 0, 1, -pose['drop']), resample=Image.NEAREST)
+    if pose.get('ground'):
+        # Rest on the floor: move the pose down to the same floor line as the standing frames
+        # (shoe soles sit 2 px below the feet point once the outline is added).
+        bottom = img.getbbox()[3]
+        shift = ORIGIN[1] + 3 - bottom
+        img = img.transform(img.size, Image.AFFINE, (1, 0, 0, 0, 1, -shift), resample=Image.NEAREST)
     img = outline(img)
     if pose.get('flip'):
         img = img.transpose(Image.FLIP_LEFT_RIGHT)
@@ -318,7 +324,7 @@ ENEMY = {
     'air2': airborne(180),
     'air3': airborne(250),
     'air4': airborne(290),
-    'lying': dict(spin=-90, drop=-10, eyes='x', stars=True, joints=P(elB=(-3, -27), haB=(-2, -21), elF=(5, -27), haF=(5, -21))),
+    'lying': dict(spin=-90, ground=True, eyes='x', stars=True, joints=P(elB=(-3, -27), haB=(-2, -21), elF=(5, -27), haF=(5, -21))),
 }
 
 # Whirlwind kick (dasher): upright body, arms tucked, kicking leg straight out level with the

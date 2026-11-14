@@ -236,9 +236,11 @@ function updateEnemy(session, enemy, end, dtMs) {
     case 'thrown': {
       const progress = Math.min(1, (end - enemy.actionStartedAt) / E.thrownFlightMs);
       enemy.x = enemy.fromX + (enemy.toX - enemy.fromX) * progress;
+      enemy.y = enemy.fromY + (enemy.toY - enemy.fromY) * progress;
       defeatOthersOnPath(session, enemy, end);
       if (done) {
         enemy.x = enemy.toX;
+        enemy.y = enemy.toY;
         defeat(session, enemy, enemy.actionEndsAt, 'throw');
       }
       return;
@@ -266,6 +268,9 @@ export function throwEnemy(session, enemy, { perfect, at = session.time }) {
   enemy.fromX = enemy.x;
   enemy.toX = clamp(player.x - side * distance, floor.left, floor.right);
   enemy.lineY = enemy.y;
+  // It comes down on the floor on the player's line, level with their feet.
+  enemy.fromY = enemy.y;
+  enemy.toY = player.y;
   enemy.critical = Boolean(perfect);
   cancelAttack(enemy);
   enemy.delayUsed = false;

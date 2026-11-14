@@ -317,11 +317,9 @@ function drawEnemy(ctx, enemy, session, { reducedMotion }) {
     return;
   }
 
-  // The warning: a flashing glow (steady with reduced motion) and a "!" (FR-003, FR-025).
+  // The warning is the wind-up pose itself plus a "!" (FR-003). No glow: players read the
+  // attack's phases to time the grab.
   const warning = enemy.action === 'windingUp' || enemy.action === 'dashWindUp';
-  if (warning && (reducedMotion || Math.floor(time / 90) % 2 === 0)) {
-    glow(ctx, enemy.x, enemy.y, COLORS.warning, 0.45);
-  }
   if (enemy.action === 'dashWindUp') {
     // A line on the floor shows where the kick will come.
     ctx.save();
